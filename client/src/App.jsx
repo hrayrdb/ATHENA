@@ -5,14 +5,14 @@ import Clinic from './pages/Clinic';
 
 function App() {
   return (
-  <main className="app transition-all ease-in">
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/clinic" element={<Clinic />} /> {/* Add route for the new page */}
-      </Routes>
-    </Router>
-  </main>
+    <main className="app transition-all ease-in">
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/clinic" element={<Clinic />} />
+        </Routes>
+      </Router>
+    </main>
   )
 }
 

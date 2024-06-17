@@ -9,7 +9,7 @@ const Model = () => {
   const snap = useSnapshot(state);
   const { nodes, materials } = useGLTF('/shirt_baked.glb');
 
-  console.log('GLTF Nodes:', nodes); // Log nodes to see their names and structure
+  console.log('GLTF Nodes:', nodes); 
 
   // Load textures
   const logoTexture = useTexture(snap.logoDecal);

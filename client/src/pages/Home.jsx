@@ -82,7 +82,7 @@ const Home = () => {
           </motion.div>
         </motion.section>
       )}
-      <CanvasModel/>
+      <CanvasModel key="canvas-model" />
 
     </AnimatePresence>
 
