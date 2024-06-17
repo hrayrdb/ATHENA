@@ -30,14 +30,15 @@ function Clinic() {
             fov: 75,
           }}
         >
+          <Customizer />
           <Experience client={client} />
         </Canvas>
       </KeyboardControls>
       {/* {
-      client && */}
-      {/* <ChatBubble client={client} /> */}
-      {/* } */}
-      <Customizer/>
+        client &&
+        <ChatBubble client={client} />
+      } */}
+
     </>
   );
 }

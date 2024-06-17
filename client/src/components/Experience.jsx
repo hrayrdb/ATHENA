@@ -9,6 +9,8 @@ import { Suspense, useEffect, useState } from 'react';
 import { CuboidCollider, Physics, RigidBody } from '@react-three/rapier';
 import { ConvaiFPS } from './fps/convaiFPS';
 import { Nikhil } from './models/Nikhil';
+
+
 export const Experience = ({ client }) => {
   const [gravity, setGravity] = useState([0, 0, 0]);
   useEffect(() => {
