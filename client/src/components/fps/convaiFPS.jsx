@@ -2,7 +2,7 @@ import { PointerLockControls } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { useRef } from 'react';
 import * as THREE from 'three';
-
+import { Player } from './Player';
 export const ConvaiFPS = () => {
   const cameraRef = useRef();
 
@@ -16,8 +16,8 @@ export const ConvaiFPS = () => {
 
   return (
     <>
-      {/* <PointerLockControls ref={cameraRef} /> */}
-      {/* <Player /> */}
+      {/* <PointerLockControls ref={cameraRef} />
+      <Player /> */}
     </>
   );
 };

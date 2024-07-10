@@ -4,6 +4,7 @@ import { KeyboardControls, Loader } from '@react-three/drei';
 import { useConvaiClient } from '../hooks/useConvaiClient';
 import ChatBubble from '../components/chat/Chat';
 import Customizer from '../pages/Customizer'
+import UI from '../components/chat/UI'
 function Clinic() {
   const apiKey = "79f59a42818bca9f304c576aea5d04e4";
   const characterId = "327dfc32-2cb8-11ef-aaf8-42010a7be00e";
@@ -34,11 +35,12 @@ function Clinic() {
           <Experience client={client} />
         </Canvas>
       </KeyboardControls>
-      {/* {
-        client &&
-        <ChatBubble client={client} />
-      } */}
 
+         {/* {
+      client && */}
+      {/* <ChatBubble client={client} /> */}
+      <UI/>
+      {/* } */}
     </>
   );
 }

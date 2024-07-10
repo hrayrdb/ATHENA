@@ -8,6 +8,7 @@ import state from '../store';
 const Model = () => {
   const snap = useSnapshot(state);
   const { nodes, materials } = useGLTF('/shirt_baked.glb');
+  // const { nodes, materials } = useGLTF('/nikhil.glb');
 
   console.log('GLTF Nodes:', nodes); 
 

@@ -9,8 +9,6 @@ import {
   slideAnimation
 } from '../config/motion';
 
-
-
 import { Canvas } from '@react-three/fiber';
 
 import Model from '../canvas/Model';
@@ -25,7 +23,7 @@ const CanvasModel = () => {
   return (
     <Canvas
       shadows
-      camera={{ position: [0, 0, 0], fov: 25 }}
+      camera={{ position: [0, 0, 0], fov: 35 }}
       gl={{ preserveDrawingBuffer: true }}
       className="w-full max-w-full h-full transition-all ease-in"
     >
@@ -50,15 +48,15 @@ const Home = () => {
     <AnimatePresence>
       {snap.intro && (
         <motion.section className="home" {...slideAnimation('left')}>
-          <motion.header {...slideAnimation("down")}>
+          {/* <motion.header {...slideAnimation("down")}>
             <img
               src='./threejs.png'
               alt="logo"
               className="w-8 h-8 object-contain"
             />
-          </motion.header>
+          </motion.header> */}
 
-          <motion.div className="home-content items-center"  {...headContainerAnimation}>
+          <motion.div className="home-content text-center flex flex-col items-center justify-center max-w-md"  {...headContainerAnimation}>
             <motion.div {...headTextAnimation} className='items-center'>
               <h1 className="head-text text-4xl md:text-5xl lg:text-6xl leading-tight">
                 ATHENA
@@ -75,14 +73,14 @@ const Home = () => {
               <CustomButton
                 type="filled"
                 title="Try It"
-                handleClick={() => navigate('/clinic')}
+                handleClick={() => navigate('/signup')}
                 customStyles="w-fit px-4 py-2.5 font-bold text-sm"
               />
             </motion.div>
           </motion.div>
         </motion.section>
       )}
-      <CanvasModel key="canvas-model" />
+      {/* <CanvasModel key="canvas-model" /> */}
 
     </AnimatePresence>
 

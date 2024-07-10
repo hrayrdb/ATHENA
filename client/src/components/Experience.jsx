@@ -9,7 +9,8 @@ import { Suspense, useEffect, useState } from 'react';
 import { CuboidCollider, Physics, RigidBody } from '@react-three/rapier';
 import { ConvaiFPS } from './fps/convaiFPS';
 import { Nikhil } from './models/Nikhil';
-
+import { Athena } from './models/Athena';
+import Customizer from '../pages/Customizer';
 
 export const Experience = ({ client }) => {
   const [gravity, setGravity] = useState([0, 0, 0]);
@@ -35,12 +36,14 @@ export const Experience = ({ client }) => {
       />
 
       {/* models */}
-      <Stats />
+      {/* <Stats /> */}
       <Suspense>
         <Physics gravity={gravity}>
           <ConvaiFPS />
           <Sky />
-          {/* <Corey client={client} /> */}
+
+
+          {/* <Athena client={client} /> */}
           <Nikhil client={client} />
           <Grid followCamera infiniteGrid fadeDistance={50} />
           <RigidBody type="fixed">
@@ -72,3 +75,4 @@ export const Experience = ({ client }) => {
     </>
   );
 };
+

@@ -17,6 +17,7 @@
     "convai-web-sdk": "^0.1.1",
     "framer-motion": "^10.9.4",
     "maath": "^0.5.3",
+    "mongodb": "^6.8.0",
     "react": "^18.2.0",
     "react-color": "^2.19.3",
     "react-dom": "^18.2.0",
