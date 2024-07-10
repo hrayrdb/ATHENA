@@ -65,15 +65,6 @@ const Signup = () => {
         return errors;
     };
 
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
-    //     const validationErrors = validate();
-    //     setErrors(validationErrors);
-    //     if (Object.keys(validationErrors).length === 0) {
-    //         console.log('Form values:', { email, password, confirmPassword });
-    //         navigate('/info');
-    //     }
-    // };
     const handleSubmit = (e) => {
         e.preventDefault();
         const validationErrors = validate();
