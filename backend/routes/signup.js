@@ -44,3 +44,17 @@ router.post('/signup', async (req, res) => {
 });
 
 module.exports = router;
+
+
+router.post('/check-email', async (req, res) => {
+  try {
+    const { email } = req.body;
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ message: 'Email already exists' });
+    }
+    res.status(200).json({ message: 'Email is available' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});

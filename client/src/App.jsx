@@ -5,6 +5,8 @@ import Clinic from './pages/Clinic';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Info from './pages/Info';
+import Test from './pages/Test';
+
 function App() {
   return (
     <main className="app transition-all ease-in">
@@ -15,7 +17,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/info" element={<Info />} />
-
+          <Route path="/test" element={<Test />} />
         </Routes>
       </Router>
     </main>

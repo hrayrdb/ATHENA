@@ -44,6 +44,7 @@ const Signup = () => {
     const [password, setPassword] = useState('hrayrhrayr');
     const [confirmPassword, setConfirmPassword] = useState('hrayrhrayr');
     const [errors, setErrors] = useState({});
+    const [emailExists, setEmailExists] = useState(false);
 
     const validate = () => {
         const errors = {};
@@ -65,15 +66,42 @@ const Signup = () => {
         return errors;
     };
 
-    const handleSubmit = (e) => {
+    const checkEmailExists = async (email) => {
+        try {
+            const response = await fetch('http://localhost:5000/api/check-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email })
+            });
+
+            if (response.status === 409) {
+                setEmailExists(true);
+                return false;
+            } else if (response.status === 200) {
+                setEmailExists(false);
+                return true;
+            } else {
+                throw new Error('Something went wrong');
+            }
+        } catch (error) {
+            console.error(error);
+            return false;
+        }
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const validationErrors = validate();
         setErrors(validationErrors);
         if (Object.keys(validationErrors).length === 0) {
-            navigate('/info', { state: { email, password } });
+            const emailValid = await checkEmailExists(email);
+            if (emailValid) {
+                navigate('/info', { state: { email, password } });
+            }
         }
     };
-
     return (
         <AnimatePresence>
             {snap.intro && (
@@ -105,6 +133,8 @@ const Signup = () => {
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
                                 {errors.email && <div className="text-red-500 text-sm">{errors.email}</div>}
+                                {emailExists && <div className="text-red-500 text-sm">* Email already exists</div>}
+
 
                                 <input
                                     type="password"

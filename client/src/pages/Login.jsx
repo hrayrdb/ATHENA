@@ -40,9 +40,10 @@ const Login = () => {
     const snap = useSnapshot(state);
     const navigate = useNavigate();
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('hrayr@gmail.com');
+    const [password, setPassword] = useState('hrayrhrayr');
     const [errors, setErrors] = useState({});
+    const [authError, setAuthError] = useState('');
 
     const validate = () => {
         const errors = {};
@@ -57,28 +58,54 @@ const Login = () => {
         return errors;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const validationErrors = validate();
         setErrors(validationErrors);
         if (Object.keys(validationErrors).length === 0) {
-            console.log('Form values:', { email, password });
-            navigate('/clinic');
+            try {
+                const response = await fetch('http://localhost:5000/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Login successful:', data);
+                    // Assuming you store the token in localStorage after successful login
+                    localStorage.setItem('token', generateRandomToken(64));
+                    navigate('/test');
+                } else {
+                    const errorData = await response.json();
+                    setAuthError(errorData.message);
+                }
+            } catch (error) {
+                console.error('Error during login:', error);
+                setAuthError('An unexpected error occurred. Please try again later.');
+            }
         }
     };
+
+    const generateRandomToken = (length = 32) => {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-';
+
+        const bytes = new Uint8Array(length);
+
+        crypto.getRandomValues(bytes);
+
+        const randomChars = bytes.map(byte => characters[byte % characters.length]);
+
+        return randomChars.join('');
+    };
+
 
     return (
         <AnimatePresence>
             {snap.intro && (
                 <motion.section className="home flex flex-col items-center justify-center min-h-screen px-4" {...slideAnimation('left')}>
-                    {/* <motion.header {...slideAnimation("down")}>
-                        <img
-                            src='./threejs.png'
-                            alt="logo"
-                            className="w-8 h-8 object-contain"
-                        />
-                    </motion.header> */}
-
                     <motion.div className="home-content text-center flex flex-col items-center justify-center max-w-md" {...headContainerAnimation}>
                         <motion.div {...headTextAnimation} className="text-center">
                             <h1 className="head-text text-4xl md:text-5xl lg:text-6xl leading-tight">
@@ -107,6 +134,8 @@ const Login = () => {
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
                                 {errors.password && <div className="text-red-500 text-sm pl-3">{errors.password}</div>}
+
+                                {authError && <div className="text-red-500 text-sm pl-3">{authError}</div>}
 
                                 <CustomButton
                                     type="filled"
