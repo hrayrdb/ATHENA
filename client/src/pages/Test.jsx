@@ -14,7 +14,6 @@ const Test = () => {
         }
 
         if (!userState.user) {
-            // If not logged in, redirect to login page
             navigate('/login');
         }
 

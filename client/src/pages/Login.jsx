@@ -79,6 +79,7 @@ const Login = () => {
                     userState.setUser(data.user);
                     //store token
                     localStorage.setItem('token', generateRandomToken(64));
+
                     navigate('/test');
                 } else {
                     const errorData = await response.json();
