@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate , useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { CustomButton } from '../components';
 import {
   headContainerAnimation,
@@ -56,7 +56,7 @@ const Info = () => {
     }
     if (!formData.numberOfSiblings.trim()) {
       errors.numberOfSiblings = '* Number of siblings is required';
-    }else if (formData.numberOfSiblings < 0) {
+    } else if (formData.numberOfSiblings < 0) {
       errors.numberOfSiblings = '* Number of siblings can not be under 0';
     }
     if (!formData.relationshipStatus.trim()) {
@@ -71,32 +71,36 @@ const Info = () => {
     return Object.keys(errors).length === 0;
   };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const isValid = validateForm();
-        if (isValid) {
-            const userData = {
-                email,
-                password,
-                ...formData
-            };
-            const response = await fetch('http://localhost:5000/api/signup', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(userData)
-            });
-            if (response.ok) {
-                console.log('User created successfully');
-                navigate('/clinic');
-            } else {
-                console.error('Failed to create user');
-            }
-        } else {
-            console.log('Form validation failed');
-        }
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const isValid = validateForm();
+    if (isValid) {
+      const userData = {
+        email,
+        password,
+        ...formData,
+        name: formData.name.toLowerCase(),
+        educationLevel: formData.educationLevel.toLowerCase(),
+        occupation: formData.occupation.toLowerCase(),
+        relationshipStatus: formData.relationshipStatus.toLowerCase()
+      };
+      const response = await fetch('http://localhost:5000/api/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+      });
+      if (response.ok) {
+        console.log('User created successfully');
+        navigate('/clinic');
+      } else {
+        console.error('Failed to create user');
+      }
+    } else {
+      console.log('Form validation failed');
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
