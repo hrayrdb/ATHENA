@@ -1,6 +1,9 @@
+// store/index.js
+
 import { proxy } from 'valtio';
 
-const state = proxy({
+// Define your application state
+export const state = proxy({
   intro: true,
   color: '#EFBD48',
   isLogoTexture: true,
@@ -9,4 +12,13 @@ const state = proxy({
   fullDecal: './threejs.png',
 });
 
-export default state;
+// Define user-related state using Valtio
+export const userState = proxy({
+    user: null,
+    setUser: (userData) => {
+        userState.user = userData;
+    },
+    clearUser: () => {
+        userState.user = null;
+    }
+});

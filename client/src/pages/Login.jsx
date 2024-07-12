@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSnapshot } from 'valtio';
-import state from '../store';
+import {state , userState} from '../store';
 import { CustomButton } from '../components';
 import {
     headContainerAnimation,
@@ -75,7 +75,9 @@ const Login = () => {
                 if (response.ok) {
                     const data = await response.json();
                     console.log('Login successful:', data);
-                    // Assuming you store the token in localStorage after successful login
+                    //set user data 
+                    userState.setUser(data.user);
+                    //store token
                     localStorage.setItem('token', generateRandomToken(64));
                     navigate('/test');
                 } else {
