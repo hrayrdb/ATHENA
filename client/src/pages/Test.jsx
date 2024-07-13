@@ -34,7 +34,7 @@ const App = () => {
                 });
         } else {
             navigate('/login'); // Redirect to login if there's no token
-            setLoading(false);            
+            setLoading(false);
         }
     }, []);
 
@@ -54,8 +54,7 @@ const App = () => {
                     <button onClick={handleLogout}>Logout</button>
                 </div>
             ) : (
-                <div>Please log in</div>
-            )}
+                navigate('/login'))}
         </div>
     );
 };
