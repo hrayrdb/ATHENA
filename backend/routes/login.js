@@ -1,8 +1,12 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
 const router = express.Router();
+
+// Replace with your secret key
+const JWT_SECRET = 'your_jwt_secret';
 
 router.post('/login', async (req, res) => {
   try {
@@ -20,8 +24,11 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: '* Invalid email or password' });
     }
 
-    // If everything is correct, return a success message
-    res.status(200).json({ message: 'Login successful' , user: user});
+    // Create a JWT token
+    const token = jwt.sign({ userId: user._id, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
+
+    // If everything is correct, return the token
+    res.status(200).json({ message: 'Login successful', token, user });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

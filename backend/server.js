@@ -1,7 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const signupRoutes = require('./routes/signup');
-const loginRoutes = require('./routes/login'); // Import login routes
+const loginRoutes = require('./routes/login');
+const verifyRoutes = require('./routes/verifyToken');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config(); // Load environment variables
@@ -15,7 +16,8 @@ app.use(bodyParser.json());
 
 // Routes
 app.use('/api', signupRoutes);
-app.use('/api', loginRoutes); // Use login routes
+app.use('/api', loginRoutes); 
+app.use('/api', verifyRoutes);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)

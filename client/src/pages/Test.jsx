@@ -1,45 +1,63 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { userState } from '../store'; // Import the Valtio state
+import { useSnapshot } from 'valtio';
+import { userState } from '../store';
 
-const Test = () => {
+const App = () => {
+    const snap = useSnapshot(userState);
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Check if token exists in localStorage
         const token = localStorage.getItem('token');
-        if (!token) {
-            // If no token, redirect to login page
-            navigate('/login');
+        if (token) {
+            fetch('http://localhost:5000/api/verifyToken', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.user) {
+                        userState.setUser(data.user);
+                    } else {
+                        localStorage.removeItem('token');
+                    }
+                    setLoading(false);
+                })
+                .catch(error => {
+                    console.error('Error verifying token:', error);
+                    localStorage.removeItem('token');
+                    setLoading(false);
+                });
+        } else {
+            navigate('/login'); // Redirect to login if there's no token
+            setLoading(false);            
         }
-
-        if (!userState.user) {
-            navigate('/login');
-        }
-
-    }, [navigate]);
+    }, []);
 
     const handleLogout = () => {
-        // Clear user data from Valtio state
-        userState.clearUser();
-
-        // Clear token from localStorage (if necessary)
         localStorage.removeItem('token');
-
-        // Redirect to login page
+        userState.setUser(null);
         navigate('/login');
     };
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div>
-            <h1>Welcome, {userState.user ? userState.user.name : ''}!</h1>
-            <button onClick={handleLogout}>Logout</button>
+            {snap.user ? (
+                <div>Welcome, {snap.user.email}
+                    <button onClick={handleLogout}>Logout</button>
+                </div>
+            ) : (
+                <div>Please log in</div>
+            )}
         </div>
     );
 };
 
-export default Test;
-
-
-
-
+export default App;

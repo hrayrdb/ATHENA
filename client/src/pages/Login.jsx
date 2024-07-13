@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSnapshot } from 'valtio';
 import {state , userState} from '../store';
@@ -45,6 +45,31 @@ const Login = () => {
     const [errors, setErrors] = useState({});
     const [authError, setAuthError] = useState('');
 
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+          // Verify token with the server and get user data
+          fetch('http://localhost:5000/api/verifyToken', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.user) {
+              userState.setUser(data.user);
+            }
+          })
+          .catch(error => {
+            console.error('Error verifying token:', error);
+            localStorage.removeItem('token');
+          });
+        }
+      }, []);
+
+      
     const validate = () => {
         const errors = {};
         if (!email) {
@@ -59,38 +84,40 @@ const Login = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        const validationErrors = validate();
-        setErrors(validationErrors);
-        if (Object.keys(validationErrors).length === 0) {
-            try {
-                const response = await fetch('http://localhost:5000/api/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ email, password }),
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log('Login successful:', data);
-                    //set user data 
-                    userState.setUser(data.user);
-                    //store token
-                    localStorage.setItem('token', generateRandomToken(64));
-
-                    navigate('/test');
-                } else {
-                    const errorData = await response.json();
-                    setAuthError(errorData.message);
-                }
-            } catch (error) {
-                console.error('Error during login:', error);
-                setAuthError('An unexpected error occurred. Please try again later.');
-            }
+      e.preventDefault();
+      const validationErrors = validate();
+      setErrors(validationErrors);
+      if (Object.keys(validationErrors).length === 0) {
+        try {
+          const response = await fetch('http://localhost:5000/api/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
+          });
+    
+          if (response.ok) {
+            const data = await response.json();
+            console.log('Login successful:', data);
+    
+            // Store user data and token
+            userState.setUser(data.user);
+            localStorage.setItem('token', data.token);
+    
+            navigate('/test');
+          } else {
+            const errorData = await response.json();
+            setAuthError(errorData.message);
+          }
+        } catch (error) {
+          console.error('Error during login:', error);
+          setAuthError('An unexpected error occurred. Please try again later.');
         }
+      }
     };
+    
+      
 
     const generateRandomToken = (length = 32) => {
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-';
@@ -153,7 +180,7 @@ const Login = () => {
                     </motion.div>
                 </motion.section>
             )}
-            {/* <CanvasModel key="canvas-model" /> */}
+             {/* <CanvasModel key="canvas-model" />  */}
         </AnimatePresence>
     )
 }
