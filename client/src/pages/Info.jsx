@@ -8,24 +8,27 @@ import {
   headTextAnimation,
   slideAnimation
 } from '../config/motion';
+import {state , userState} from '../store';
+
 
 const Info = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { email, password } = location.state;
+  const [authError, setAuthError] = useState('');
 
   const [formData, setFormData] = useState({
-    name: '',
-    yearOfBirth: '',
-    educationLevel: '',
-    occupation: '',
-    workingHoursPerDay: '',
+    name: 'hrayr',
+    yearOfBirth: '2001',
+    educationLevel: 'university',
+    occupation: 'engineer',
+    workingHoursPerDay: '8',
     momPassed: false,
     dadPassed: false,
     parentsDivorced: false,
-    numberOfSiblings: '',
-    relationshipStatus: '',
-    numberOfChildren: ''
+    numberOfSiblings: '1',
+    relationshipStatus: 'single',
+    numberOfChildren: '0'
   });
   const [errors, setErrors] = useState({});
 
@@ -71,6 +74,37 @@ const Info = () => {
     return Object.keys(errors).length === 0;
   };
 
+  const login = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('http://localhost:5000/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Login successful:', data);
+
+        // Store user data and token
+        userState.setUser(data.user);
+        localStorage.setItem('token', data.token);
+
+        navigate('/test');
+      } else {
+        const errorData = await response.json();
+        setAuthError(errorData.message);
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+      setAuthError('An unexpected error occurred. Please try again later.');
+    }
+
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const isValid = validateForm();
@@ -93,7 +127,7 @@ const Info = () => {
       });
       if (response.ok) {
         console.log('User created successfully');
-        navigate('/clinic');
+        login(e);
       } else {
         console.error('Failed to create user');
       }
@@ -246,6 +280,7 @@ const Info = () => {
                               "
             />
             {errors.numberOfChildren && <div className="text-red-500 text-sm pl-3">{errors.numberOfChildren}</div>}
+            {authError && <div className="text-red-500 text-sm pl-3">{authError}</div>}
 
             <CustomButton
               type="filled"
