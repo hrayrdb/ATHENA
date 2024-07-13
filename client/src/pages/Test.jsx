@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSnapshot } from 'valtio';
 import { userState } from '../store';
 
-const App = () => {
+const Test = () => {
     const snap = useSnapshot(userState);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
@@ -50,7 +50,7 @@ const App = () => {
     return (
         <div>
             {snap.user ? (
-                <div>Welcome, {snap.user.email}
+                <div>Welcome, {snap.user.name}
                     <button onClick={handleLogout}>Logout</button>
                 </div>
             ) : (
@@ -59,4 +59,4 @@ const App = () => {
     );
 };
 
-export default App;
+export default Test;
