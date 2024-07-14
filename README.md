@@ -21,9 +21,7 @@
 2. ⚙️ [Tech Stack](#tech-stack)
 3. 🔋 [Features](#features)
 4. 🤸 [Quick Start](#quick-start)
-5. 🕸️ [Snippets](#snippets)
-6. 🔗 [Links](#links)
-7. 🚀 [More](#more)
+5. 🔗 [Links](#links)
 <!-- 
 ## 🚨 Tutorial
 
@@ -92,8 +90,8 @@ Make sure you have the following installed on your machine:
 **Cloning the Repository**
 
 ```bash
-git clone https://github.com/adrianhajdin/project_threejs_ai.git
-cd project_threejs_ai
+git clone https://github.com/hrayrdb/ATHENA.git
+cd athena
 ```
 
 **Installation**
@@ -104,7 +102,7 @@ Install the project dependencies using npm in both client and server folders:
 npm install
 ```
 
-**Set Up Environment Variables**
+<!-- **Set Up Environment Variables**
 
 Create a new file named `.env` in the root of your project and add the following content:
 
@@ -112,7 +110,7 @@ Create a new file named `.env` in the root of your project and add the following
 OPENAI_API_KEY=
 ```
 
-Replace the placeholder values with your actual OpenAI credentials. You can obtain these credentials by signing up on the [Open website](https://openai.com/).
+Replace the placeholder values with your actual OpenAI credentials. You can obtain these credentials by signing up on the [Open website](https://openai.com/). -->
 
 **Running the Project**
 
