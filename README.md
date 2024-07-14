@@ -1,6 +1,6 @@
 <div align="center">
   <br />
-![Banner Image](assets/banner.png)
+      <img src="(https://github.com/hrayrdb/ATHENA/blob/main/assets/banner.png)" alt="Project Banner">
   <br />
  
   <h3 align="center">A Virtual Therapist</h3>
