@@ -33,7 +33,7 @@ If you prefer visual learning, this is the perfect resource for you. Follow our 
 
 ## <a name="introduction">🤖 Introduction</a>
 
-Introducing our Virtual Therapist application, an innovative platform designed to provide accessible and convenient mental health support. <br/> It offers personalized therapy sessions, mental health assessments, and progress tracking, all from the comfort of your home.
+Introducing our Virtual Therapist application, an innovative platform designed to provide accessible and convenient mental health support. <br/> It offers personalized therapy sessions, mental health assessments, and progress tracking, all from the comfort of your home. <br/> 
 Our secure and user-friendly interface ensures privacy and ease of use, empowering you to take control of your mental well-being anytime, anywhere.
 
 
