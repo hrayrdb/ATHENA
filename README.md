@@ -1,8 +1,6 @@
 <div align="center">
   <br />
-    <a href="https://youtu.be/ZqEa8fTxypQ?feature=shared" target="_blank">
-      <img src="https://github.com/hrayrdb/athena/assets/banner" alt="Project Banner">
-    </a>
+      <img src="https://github.com/hrayrdb/athena/assets/banner.png" alt="Project Banner">
   <br />
  
   <!-- <div>
