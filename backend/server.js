@@ -5,6 +5,7 @@ const loginRoutes = require('./routes/login');
 const verifyRoutes = require('./routes/verifyToken');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+
 require('dotenv').config(); // Load environment variables
 
 const app = express();
