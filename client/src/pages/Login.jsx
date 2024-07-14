@@ -105,7 +105,7 @@ const Login = () => {
             userState.setUser(data.user);
             localStorage.setItem('token', data.token);
     
-            navigate('/test');
+            navigate('/clinic');
           } else {
             const errorData = await response.json();
             setAuthError(errorData.message);

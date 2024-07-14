@@ -5,7 +5,7 @@ import Clinic from './pages/Clinic';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Info from './pages/Info';
-import Test from './pages/Test';
+import Space from './pages/Space';
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/info" element={<Info />} />
-          <Route path="/test" element={<Test />} />
+          <Route path="/space" element={<Space />} />
 
         </Routes>
       </Router>
