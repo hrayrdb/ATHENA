@@ -47,7 +47,7 @@ Our secure and user-friendly interface ensures privacy and ease of use, empoweri
 - Tailwind CSS
 - Node.js
 - Express.js
-- OpenAI
+- MongoDB
 - Framer Motion
 - Valtio
 
