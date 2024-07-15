@@ -8,10 +8,46 @@ import { fadeAnimation, slideAnimation } from '../config/motion';
 import { AIPicker, ColorPicker, CustomButton, FilePicker, Tab } from '../components';
 import { EditorTabs, FilterTabs, DecalTypes } from '../config/constants';
 
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import MenuIcon from '@mui/icons-material/Menu';
+import { styled } from '@mui/material/styles';
+
+import ConfirmationDialog from '../components/ConfirmationDialog';
+
+// Custom styled Menu component
+const CustomMenu = styled(Menu)(({ theme }) => ({
+    '& .MuiPaper-root': {
+        backgroundColor: '#FFF',
+        color: '#111',
+        borderRadius: '8px',
+        boxShadow: '0 5px 15px rgba(0, 0, 0, 0.3)',
+        fontFamily: 'Dharma-Gothic-E-Bold',
+        padding: '20px',
+        minWidth: '200px',
+    },
+}));
+
+// Custom styled MenuItem component
+const CustomMenuItem = styled(MenuItem)(({ theme }) => ({
+    '&:hover': {
+        backgroundColor: '#999',
+    },
+    '& .MuiListItemText-primary': {
+        color: '#fff',
+    },
+    fontFamily: 'Dharma-Gothic-E-Light-Italic',
+    fontSize: '30px',
+}));
+
 const Buttons = () => {
     const snap = useSnapshot(userState);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const open = Boolean(anchorEl);
 
     const [file, setFile] = useState('');
     const [prompt, setPrompt] = useState('');
@@ -21,6 +57,9 @@ const Buttons = () => {
         logoShirt: true,
         stylishShirt: false,
     });
+
+    const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -60,6 +99,48 @@ const Buttons = () => {
         navigate('/login');
     };
 
+    const handleMenuClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleMenuItemClick = (action) => {
+        handleMenuClose();
+        switch (action) {
+            case 'profile':
+                navigate('/profile');
+                break;
+            case 'settings':
+                navigate('/settings');
+                break;
+            case 'record':
+                navigate('/record');
+                break;
+            case 'logout':
+                console.log(showLogoutDialog);
+                setShowLogoutDialog(true);
+                console.log(showLogoutDialog);
+
+                break;
+            default:
+                break;
+        }
+    };
+
+    const handleConfirmLogout = () => {
+
+        setShowLogoutDialog(false);
+        handleLogout();
+    };
+
+    const handleCancelLogout = () => {
+
+        setShowLogoutDialog(false);
+    };
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -83,7 +164,7 @@ const Buttons = () => {
                                 <Tab
                                     key={tab.name}
                                     tab={tab}
-                                    // handleClick={}
+                                // handleClick={}
                                 />
                             ))}
                             {/* {generateTabContent()} */}
@@ -95,12 +176,35 @@ const Buttons = () => {
                     className="absolute z-10 top-5 right-5"
                     {...fadeAnimation}
                 >
-                    <CustomButton
-                        type="filled"
-                        title="Logout"
-                        handleClick={() => handleLogout()}
-                        customStyles="w-fit px-4 py-2.5 font-bold text-sm"
-                    />
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        onClick={handleMenuClick}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <CustomMenu
+                        id="menu-appbar"
+                        anchorEl={anchorEl}
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        keepMounted
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        open={open}
+                        onClose={handleMenuClose}
+                    >
+                        <CustomMenuItem onClick={() => handleMenuItemClick('profile')}>PROFILE</CustomMenuItem>
+                        <CustomMenuItem onClick={() => handleMenuItemClick('record')}>MEDICAL RECORD</CustomMenuItem>
+                        <CustomMenuItem onClick={() => handleMenuItemClick('settings')}>SETTINGS</CustomMenuItem>
+                        <CustomMenuItem onClick={() => handleMenuItemClick('logout')}>LOGOUT</CustomMenuItem>
+                    </CustomMenu>
                 </motion.div>
 
                 <motion.div
@@ -113,12 +217,20 @@ const Buttons = () => {
                             tab={tab}
                             isFilterTab
                             isActiveTab={activeFilterTab[tab.name]}
-                            // handleClick={() => handleActiveFilterTab(tab.name)}
+                        // handleClick={() => handleActiveFilterTab(tab.name)}
                         />
                     ))}
                 </motion.div>
+                {/* Confirmation dialog for logout */}
+                {showLogoutDialog && (
+                    <ConfirmationDialog
+                        onConfirm={handleConfirmLogout}
+                        onCancel={handleCancelLogout}
+                    />
+                )}
             </>
         </AnimatePresence>
+
     );
 };
 
