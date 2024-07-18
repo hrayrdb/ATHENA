@@ -120,10 +120,7 @@ const Buttons = () => {
                 navigate('/record');
                 break;
             case 'logout':
-                console.log(showLogoutDialog);
                 setShowLogoutDialog(true);
-                console.log(showLogoutDialog);
-
                 break;
             default:
                 break;
@@ -217,7 +214,8 @@ const Buttons = () => {
                             tab={tab}
                             isFilterTab
                             isActiveTab={activeFilterTab[tab.name]}
-                        // handleClick={() => handleActiveFilterTab(tab.name)}
+
+                        //  handleClick={() => handleActiveFilterTab(tab.name)}
                         />
                     ))}
                 </motion.div>
