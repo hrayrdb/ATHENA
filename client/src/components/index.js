@@ -1,12 +1,12 @@
 import CustomButton from "./CustomButton";
-import AIPicker from "./AIPicker";
+import InputText from "./InputText";
 import ColorPicker from "./ColorPicker";
 import FilePicker from "./FilePicker";
 import Tab from "./Tab";
 
 export { 
   CustomButton,
-  AIPicker,
+  InputText,
   ColorPicker,
   FilePicker,
   Tab,

@@ -58,16 +58,19 @@ html {
   @apply w-14 h-14 flex justify-center items-center rounded-full glassmorphism cursor-pointer outline-none;
 }
 
-.editortabs-container {
+.sessiontabs-container {
   @apply glassmorphism w-16 border-[2px] rounded-lg flex flex-col justify-center items-center ml-1 py-4 gap-4;
 }
 
-.filtertabs-container {
+.inputtabs-container {
   @apply absolute z-10 bottom-5 right-0 left-0 w-full flex justify-center items-center flex-wrap gap-4;
 }
 
-.aipicker-container {
-  @apply absolute left-full ml-3 glassmorphism p-3 w-[195px] h-[220px] rounded-md flex flex-col gap-4;
+.bottom-tab-content {
+  @apply absolute bottom-full mb-3 left-1/2 transform -translate-x-1/2 p-3 w-[195px] h-[220px] rounded-md flex flex-col gap-4;
+  background-color: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 2px 30px 0 rgba(31, 38, 135, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 .aipicker-textarea {
@@ -85,6 +88,7 @@ html {
 .tab-btn {
   @apply w-14 h-14 flex justify-center items-center cursor-pointer select-none;
 }
+
 
 .glassmorphism {
   background: rgba(255, 255, 255, 0.25);
@@ -371,4 +375,34 @@ span {
 .confirm-button:hover,
 .cancel-button:hover {
   opacity: 0.8;
+}
+
+
+.mic-tab {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.mic-button {
+  font-size: 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.mic-button:active {
+  background-color: #e0e0e0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }

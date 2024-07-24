@@ -1,6 +1,6 @@
 import {  fileIcon, ai, mic ,chat , info , timer , typing } from "../assets";
 
-export const EditorTabs = [
+export const SessionTabs = [
   {
     name: "chat",
     icon: chat,
@@ -15,24 +15,13 @@ export const EditorTabs = [
   },
 ];
 
-export const FilterTabs = [
+export const InputTabs = [
   {
-    name: "Text",
+    name: "text",
     icon: typing,
   },
   {
-    name: "Mic",
+    name: "mic",
     icon: mic,
   },
 ];
-
-export const DecalTypes = {
-  logo: {
-    stateProperty: "logoDecal",
-    filterTab: "logoShirt",
-  },
-  full: {
-    stateProperty: "fullDecal",
-    filterTab: "stylishShirt",
-  },
-};

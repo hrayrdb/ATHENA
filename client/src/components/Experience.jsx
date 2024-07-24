@@ -10,7 +10,6 @@ import { CuboidCollider, Physics, RigidBody } from '@react-three/rapier';
 import { ConvaiFPS } from './fps/convaiFPS';
 import { Nikhil } from './models/Nikhil';
 import { Athena } from './models/Athena';
-import Customizer from '../pages/Customizer';
 
 export const Experience = ({ client }) => {
   const [gravity, setGravity] = useState([0, 0, 0]);

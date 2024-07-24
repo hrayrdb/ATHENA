@@ -5,7 +5,6 @@ import { Experience } from '../components/Experience';
 import { KeyboardControls, Loader } from '@react-three/drei';
 import { useConvaiClient } from '../hooks/useConvaiClient';
 import ChatBubble from '../components/chat/Chat';
-import Customizer from './Customizer';
 import Buttons from './Buttons';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';

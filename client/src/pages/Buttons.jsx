@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSnapshot } from 'valtio';
 import { userState } from '../store';
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { fadeAnimation, slideAnimation } from '../config/motion';
-import { AIPicker, ColorPicker, CustomButton, FilePicker, Tab } from '../components';
-import { EditorTabs, FilterTabs, DecalTypes } from '../config/constants';
+import {ColorPicker, CustomButton, FilePicker, InputText, Tab } from '../components';
+import InputMic from '../components/InputMic';
+import { SessionTabs, InputTabs } from '../config/constants';
 
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
@@ -52,14 +53,67 @@ const Buttons = () => {
     const [file, setFile] = useState('');
     const [prompt, setPrompt] = useState('');
     const [generatingImg, setGeneratingImg] = useState(false);
-    const [activeEditorTab, setActiveEditorTab] = useState("");
-    const [activeFilterTab, setActiveFilterTab] = useState({
-        logoShirt: true,
-        stylishShirt: false,
-    });
+    const [activeSessionTab, setActiveSessionTab] = useState("");
+    const [activeInputTab, setActiveInputTab] = useState("");
 
+    const [recognizedText, setRecognizedText] = useState('');
     const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
+    const sessionTabRef = useRef(null);
+    const inputTabRef = useRef(null);
+
+    const handleClickOutside = (event) => {
+        if (
+            sessionTabRef.current && !sessionTabRef.current.contains(event.target) &&
+            inputTabRef.current && !inputTabRef.current.contains(event.target)
+        ) {
+            setActiveSessionTab("");
+            setActiveInputTab("");
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    // show tab content depending on the activeTab
+    const generateSessionTabContent = () => {
+        switch (activeSessionTab) {
+            case "chat":
+                return <ColorPicker />
+            case "sessioninfo":
+                return <FilePicker
+                    file={file}
+                    setFile={setFile}
+                />
+            case "text":
+                return <InputText
+                    prompt={prompt}
+                    setPrompt={setPrompt}
+                    generatingImg={generatingImg}
+                />
+            default:
+                return null;
+        }
+    }
+
+    const generateInputTabContent = () => {
+        switch (activeInputTab) {
+            case "text":
+                return <InputText
+                    prompt={prompt}
+                    setPrompt={setPrompt}
+                    generatingImg={generatingImg}
+                />;
+            case "mic":
+                return <InputMic setRecognizedText={setRecognizedText} />;
+            default:
+                return null;
+        }
+    }
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -128,13 +182,11 @@ const Buttons = () => {
     };
 
     const handleConfirmLogout = () => {
-
         setShowLogoutDialog(false);
         handleLogout();
     };
 
     const handleCancelLogout = () => {
-
         setShowLogoutDialog(false);
     };
 
@@ -154,17 +206,17 @@ const Buttons = () => {
                     key="custom"
                     className="absolute top-0 left-0 z-10"
                     {...slideAnimation('left')}
+                    ref={sessionTabRef}
                 >
                     <div className="flex items-center min-h-screen">
-                        <div className="editortabs-container tabs">
-                            {EditorTabs.map((tab) => (
+                        <div className="sessiontabs-container tabs">
+                            {SessionTabs.map((tab) => (
                                 <Tab
                                     key={tab.name}
                                     tab={tab}
-                                // handleClick={}
-                                />
+                                    handleClick={() => setActiveSessionTab(tab.name)} />
                             ))}
-                            {/* {generateTabContent()} */}
+                            {generateSessionTabContent()}
                         </div>
                     </div>
                 </motion.div>
@@ -205,20 +257,26 @@ const Buttons = () => {
                 </motion.div>
 
                 <motion.div
-                    className='filtertabs-container'
+                    key="input-tabs"
+                    className="inputtabs-container"
                     {...slideAnimation("up")}
+                    ref={inputTabRef}
                 >
-                    {FilterTabs.map((tab) => (
+                    {InputTabs.map((tab) => (
                         <Tab
                             key={tab.name}
                             tab={tab}
-                            isFilterTab
-                            isActiveTab={activeFilterTab[tab.name]}
-
-                        //  handleClick={() => handleActiveFilterTab(tab.name)}
+                            isInputTab
+                            handleClick={() => setActiveInputTab(tab.name)}
                         />
                     ))}
+                    {activeInputTab && (
+                        <div className="bottom-tab-content">
+                            {generateInputTabContent()}
+                        </div>
+                    )}
                 </motion.div>
+
                 {/* Confirmation dialog for logout */}
                 {showLogoutDialog && (
                     <ConfirmationDialog
@@ -228,7 +286,6 @@ const Buttons = () => {
                 )}
             </>
         </AnimatePresence>
-
     );
 };
 
