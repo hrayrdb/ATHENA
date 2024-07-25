@@ -7,16 +7,16 @@ const InputText = ({ prompt, setPrompt, generatingImg, handleSubmit }) => {
         <div className="aipicker-container">
             <textarea 
                 placeholder="Write what you want to say..."
-                rows={5}
+                rows={6}
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                className="aipicker-textarea"
+                className="inputtext-textarea"
             />
             <div className="flex flex-wrap gap-3">
                 {generatingImg ? (
                     <CustomButton 
                         type="outline"
-                        title="Asking AI..."
+                        title="Writing your thoughts..."
                         customStyles="text-xs"
                     />
                 ) : (

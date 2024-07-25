@@ -5,8 +5,7 @@ import { userState } from '../store';
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { fadeAnimation, slideAnimation } from '../config/motion';
-import { ColorPicker, CustomButton, FilePicker, InputText, Tab } from '../components';
-import InputMic from '../components/InputMic';
+import { InputMic, ChatSystem, CustomButton, InputText, Tab } from '../components';
 import { SessionTabs, InputTabs } from '../config/constants';
 
 import IconButton from '@mui/material/IconButton';
@@ -16,6 +15,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { styled } from '@mui/material/styles';
 
 import ConfirmationDialog from '../components/ConfirmationDialog';
+import SessionInfo from '../components/SessionInfo';
 
 // Custom styled Menu component
 const CustomMenu = styled(Menu)(({ theme }) => ({
@@ -58,6 +58,7 @@ const Buttons = () => {
 
     const [recognizedText, setRecognizedText] = useState('');
     const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+    const [showSwitchViewDialog, setShowSwitchViewDialog] = useState(false);
 
     const sessionTabRef = useRef(null);
     const inputTabRef = useRef(null);
@@ -92,12 +93,9 @@ const Buttons = () => {
     const generateSessionTabContent = () => {
         switch (activeSessionTab) {
             case "chat":
-                return <ColorPicker />
+                return <ChatSystem />  
             case "sessioninfo":
-                return <FilePicker
-                    file={file}
-                    setFile={setFile}
-                />
+                return <SessionInfo user={snap.user} />; // Pass user data as props
             case "text":
                 return <InputText
                     prompt={prompt}
@@ -184,6 +182,9 @@ const Buttons = () => {
             case 'record':
                 navigate('/record');
                 break;
+            case 'switchview':
+                setShowSwitchViewDialog(true);
+                break;
             case 'logout':
                 setShowLogoutDialog(true);
                 break;
@@ -199,6 +200,15 @@ const Buttons = () => {
 
     const handleCancelLogout = () => {
         setShowLogoutDialog(false);
+    };
+
+    const handleConfirmSwitchView = () => {
+        setShowSwitchViewDialog(false);
+        navigate('/chatview');
+    };
+
+    const handleCancelSwitchView = () => {
+        setShowSwitchViewDialog(false);
     };
 
     if (loading) {
@@ -263,6 +273,7 @@ const Buttons = () => {
                         <CustomMenuItem onClick={() => handleMenuItemClick('profile')}>PROFILE</CustomMenuItem>
                         <CustomMenuItem onClick={() => handleMenuItemClick('record')}>MEDICAL RECORD</CustomMenuItem>
                         <CustomMenuItem onClick={() => handleMenuItemClick('settings')}>SETTINGS</CustomMenuItem>
+                        <CustomMenuItem onClick={() => handleMenuItemClick('switchview')}>SWITCH VIEW</CustomMenuItem>
                         <CustomMenuItem onClick={() => handleMenuItemClick('logout')}>LOGOUT</CustomMenuItem>
                     </CustomMenu>
                 </motion.div>
@@ -293,6 +304,15 @@ const Buttons = () => {
                     <ConfirmationDialog
                         onConfirm={handleConfirmLogout}
                         onCancel={handleCancelLogout}
+                    />
+                )}
+
+                {/* Confirmation dialog for switch view */}
+                {showSwitchViewDialog && (
+                    <ConfirmationDialog
+                        message="Do you really want to switch the view to text chat mode?"
+                        onConfirm={handleConfirmSwitchView}
+                        onCancel={handleCancelSwitchView}
                     />
                 )}
             </>

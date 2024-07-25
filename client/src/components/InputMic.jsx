@@ -51,7 +51,8 @@ const InputMic = ({ setRecognizedText }) => {
             >
                 🎙️
             </button>
-        </div>
+            <p className="mic-instructions">Hold to speak, <br /> release to send</p>
+        </div >
     );
 };
 
