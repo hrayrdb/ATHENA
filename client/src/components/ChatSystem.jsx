@@ -5,7 +5,8 @@ const dummyMessages = [
     { id: 2, sender: 'Therapist', message: 'I am good, thank you! How can I help you today?' },
     { id: 3, sender: 'User', message: 'I have been feeling stressed lately.' },
     { id: 4, sender: 'Therapist', message: 'I understand. Can you tell me more about what is causing your stress?' },
-    // Add more dummy messages as needed
+    { id: 5, sender: 'User', message: 'No' },
+
 ];
 
 const ChatSystem = () => {

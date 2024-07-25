@@ -1,6 +1,5 @@
 import React from 'react'
 import { useSnapshot } from 'valtio'
-
 import {state} from '../store';
 
 const Tab = ({ tab, isInputTab, isActiveTab, handleClick }) => {

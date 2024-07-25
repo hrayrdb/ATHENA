@@ -16,10 +16,10 @@ export const SessionTabs = [
 ];
 
 export const InputTabs = [
-  {
-    name: "text",
-    icon: typing,
-  },
+  // {
+  //   name: "text",
+  //   icon: typing,
+  // },
   {
     name: "mic",
     icon: mic,
