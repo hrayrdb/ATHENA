@@ -5,7 +5,7 @@ import { userState } from '../store';
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { fadeAnimation, slideAnimation } from '../config/motion';
-import {ColorPicker, CustomButton, FilePicker, InputText, Tab } from '../components';
+import { ColorPicker, CustomButton, FilePicker, InputText, Tab } from '../components';
 import InputMic from '../components/InputMic';
 import { SessionTabs, InputTabs } from '../config/constants';
 
@@ -79,6 +79,15 @@ const Buttons = () => {
         };
     }, []);
 
+    const handleSubmit = (action) => {
+        if (action === 'send') {
+            console.log(prompt);
+            setPrompt('');
+        } else if (action === 'clear') {
+            setPrompt('');
+        }
+    };
+
     // show tab content depending on the activeTab
     const generateSessionTabContent = () => {
         switch (activeSessionTab) {
@@ -94,6 +103,7 @@ const Buttons = () => {
                     prompt={prompt}
                     setPrompt={setPrompt}
                     generatingImg={generatingImg}
+                    handleSubmit={handleSubmit}
                 />
             default:
                 return null;
@@ -107,6 +117,7 @@ const Buttons = () => {
                     prompt={prompt}
                     setPrompt={setPrompt}
                     generatingImg={generatingImg}
+                    handleSubmit={handleSubmit}
                 />;
             case "mic":
                 return <InputMic setRecognizedText={setRecognizedText} />;
