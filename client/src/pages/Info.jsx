@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { CustomButton } from '../components';
+import 'react-phone-input-2/lib/style.css';
+import PhoneInput from 'react-phone-input-2';
 import {
   headContainerAnimation,
   headContentAnimation,
   headTextAnimation,
-  slideAnimation
 } from '../config/motion';
-import {state , userState} from '../store';
-
+import { userState } from '../store';
 
 const Info = () => {
   const navigate = useNavigate();
@@ -28,8 +28,16 @@ const Info = () => {
     parentsDivorced: false,
     numberOfSiblings: '1',
     relationshipStatus: 'single',
-    numberOfChildren: '0'
+    numberOfChildren: '0',
+    emergencyContact: '963954211608',
+    isAnxious: '',
+    isDepressed: '',
+    anxietySeverity: '',
+    depressionSeverity: '',
+    anxietySymptoms: '',
+    depressionSymptoms: '',
   });
+
   const [errors, setErrors] = useState({});
 
   const validateForm = () => {
@@ -41,7 +49,7 @@ const Info = () => {
     }
     if (!formData.yearOfBirth.trim()) {
       errors.yearOfBirth = '* Year of birth is required';
-    } else if (formData.yearOfBirth < 1940 || formData.yearOfBirth > (new Date().getFullYear() - 12)) {
+    } else if (formData.yearOfBirth < 1940 || formData.yearOfBirth > new Date().getFullYear() - 12) {
       errors.yearOfBirth = '* Year of birth should be between 1940 and ' + (new Date().getFullYear() - 12);
     }
     if (!formData.educationLevel.trim()) {
@@ -50,7 +58,7 @@ const Info = () => {
     if (!formData.occupation.trim()) {
       errors.occupation = '* Occupation is required';
     } else if (!/^[a-zA-Z]+$/.test(formData.occupation)) {
-      errors.occupation = '* Occuaption should be made of letters';
+      errors.occupation = '* Occupation should be made of letters';
     }
     if (!formData.workingHoursPerDay.trim()) {
       errors.workingHoursPerDay = '* Working hours per day is required';
@@ -60,7 +68,7 @@ const Info = () => {
     if (!formData.numberOfSiblings.trim()) {
       errors.numberOfSiblings = '* Number of siblings is required';
     } else if (formData.numberOfSiblings < 0) {
-      errors.numberOfSiblings = '* Number of siblings can not be under 0';
+      errors.numberOfSiblings = '* Number of siblings cannot be under 0';
     }
     if (!formData.relationshipStatus.trim()) {
       errors.relationshipStatus = '* Relationship status is required';
@@ -68,7 +76,12 @@ const Info = () => {
     if (!formData.numberOfChildren.trim()) {
       errors.numberOfChildren = '* Number of children is required';
     } else if (formData.numberOfChildren < 0) {
-      errors.numberOfChildren = '* Number of children can not be under 0';
+      errors.numberOfChildren = '* Number of children cannot be under 0';
+    }
+    if (!formData.emergencyContact.trim()) {
+      errors.emergencyContact = '* Emergency contact is required';
+    } else if (!/^\d+$/.test(formData.emergencyContact.replace(/[^\d]/g, ''))) {
+      errors.emergencyContact = '* Emergency contact should be a valid number';
     }
     setErrors(errors);
     return Object.keys(errors).length === 0;
@@ -93,7 +106,7 @@ const Info = () => {
         userState.setUser(data.user);
         localStorage.setItem('token', data.token);
 
-        navigate('/test');
+        navigate('/clinic');
       } else {
         const errorData = await response.json();
         setAuthError(errorData.message);
@@ -102,7 +115,6 @@ const Info = () => {
       console.error('Error during login:', error);
       setAuthError('An unexpected error occurred. Please try again later.');
     }
-
   };
 
   const handleSubmit = async (e) => {
@@ -116,14 +128,18 @@ const Info = () => {
         name: formData.name.toLowerCase(),
         educationLevel: formData.educationLevel.toLowerCase(),
         occupation: formData.occupation.toLowerCase(),
-        relationshipStatus: formData.relationshipStatus.toLowerCase()
+        relationshipStatus: formData.relationshipStatus.toLowerCase(),
+        anxietySymptoms: JSON.stringify(formData.anxietySymptoms), // Convert to JSON string
+        depressionSymptoms: JSON.stringify(formData.depressionSymptoms) // Convert to JSON string
       };
+      console.log(formData);
+
       const response = await fetch('http://localhost:5000/api/signup', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(userData)
+        body: JSON.stringify(userData),
       });
       if (response.ok) {
         console.log('User created successfully');
@@ -138,9 +154,9 @@ const Info = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prevState => ({
+    setFormData((prevState) => ({
       ...prevState,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === 'checkbox' ? checked : value,
     }));
   };
 
@@ -153,13 +169,12 @@ const Info = () => {
           </h1>
         </motion.div>
 
-        <motion.div {...headContentAnimation}
-          className="flex flex-col gap-7 items-start">
+        <motion.div {...headContentAnimation} className="flex flex-col gap-7 items-start">
           <form onSubmit={handleSubmit} className="flex flex-col gap-7 items-start w-full">
             <input
               type="text"
               name="name"
-              placeholder="Name"
+              placeholder="Full Name"
               value={formData.name}
               onChange={handleChange}
               className="input w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
@@ -214,7 +229,7 @@ const Info = () => {
               <input
                 type="checkbox"
                 name="momPassed"
-                checked={formData.parentsAlive}
+                checked={formData.momPassed}
                 onChange={handleChange}
                 className="mr-2"
               />
@@ -224,7 +239,7 @@ const Info = () => {
               <input
                 type="checkbox"
                 name="dadPassed"
-                checked={formData.parentsAlive}
+                checked={formData.dadPassed}
                 onChange={handleChange}
                 className="mr-2"
               />
@@ -272,14 +287,33 @@ const Info = () => {
               name="numberOfChildren"
               placeholder="No. of children"
               value={formData.numberOfChildren}
-              onChange={
-                handleChange}
-              className="input w-full p-3 border border-gray-300 rounded-md focus
-                              focus
-                              focus
-                              "
+              onChange={handleChange}
+              className="input w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
             />
             {errors.numberOfChildren && <div className="text-red-500 text-sm pl-3">{errors.numberOfChildren}</div>}
+
+            <PhoneInput
+              country={'sy'}
+              value={formData.emergencyContact}
+              onChange={(phone) => setFormData({ ...formData, emergencyContact: phone })}
+              inputStyle={{
+                width: 'calc(100% - 48px)',
+                padding: '15px',
+                borderRadius: '5px',
+                border: '1px solid #ccc',
+                fontSize: '16px',
+                marginLeft: '48px'
+              }}
+              containerStyle={{
+                width: '100%',
+              }}
+              buttonStyle={{
+                marginLeft: '0',
+                position: 'absolute',
+              }}
+            />
+            {errors.emergencyContact && <div className="text-red-500 text-sm pl-3">{errors.emergencyContact}</div>}
+
             {authError && <div className="text-red-500 text-sm pl-3">{authError}</div>}
 
             <CustomButton
@@ -291,9 +325,7 @@ const Info = () => {
           </form>
 
           <div style={{ height: '20px' }}></div>
-
         </motion.div>
-
       </motion.div>
     </motion.section>
   );

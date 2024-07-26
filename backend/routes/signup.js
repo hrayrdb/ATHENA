@@ -6,7 +6,29 @@ const router = express.Router();
 
 router.post('/signup', async (req, res) => {
   try {
-    const { email, password, name, yearOfBirth, educationLevel, occupation, workingHoursPerDay, momPassed, dadPassed, parentsDivorced, numberOfSiblings, relationshipStatus, numberOfChildren } = req.body;
+    const {
+      email,
+      password,
+      name,
+      yearOfBirth,
+      educationLevel,
+      occupation,
+      workingHoursPerDay,
+      momPassed,
+      dadPassed,
+      parentsDivorced,
+      numberOfSiblings,
+      relationshipStatus,
+      numberOfChildren,
+      emergencyContact,
+      isAnxious = '',
+      anxietySeverity = '',
+      anxietySymptoms = {},
+      isDepressed = '',
+      depressionSeverity = '',
+      depressionSymptoms = {}
+    } = req.body;
+
 
     // Check if the user already exists
     const existingUser = await User.findOne({ email });
@@ -31,10 +53,16 @@ router.post('/signup', async (req, res) => {
       parentsDivorced,
       numberOfSiblings,
       relationshipStatus,
-      numberOfChildren
+      numberOfChildren,
+      emergencyContact,
+      isAnxious,
+      anxietySeverity,
+      anxietySymptoms: typeof anxietySymptoms === 'string' ? JSON.parse(anxietySymptoms) : anxietySymptoms,
+      isDepressed,
+      depressionSeverity,
+      depressionSymptoms: typeof depressionSymptoms === 'string' ? JSON.parse(depressionSymptoms) : depressionSymptoms
     });
 
-    // Save the user to the database
     await newUser.save();
 
     res.status(201).json({ message: 'User created successfully' });

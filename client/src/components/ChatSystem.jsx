@@ -1,18 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const dummyMessages = [
-    { id: 1, sender: 'User', message: 'Hello, ss?' },
-    { id: 2, sender: 'Therapist', message: 'I am good, thank you! How can I help you today?' },
-    { id: 3, sender: 'User', message: 'I have been feeling stressed lately.' },
-    { id: 4, sender: 'Therapist', message: 'I understand. Can you tell me more about what is causing your stress?' },
-    { id: 5, sender: 'User', message: 'No' },
-
-];
-
 const ChatSystem = () => {
-    const [messages, setMessages] = useState(dummyMessages);
+    const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
     const chatContainerRef = useRef(null);
 
     useEffect(() => {
@@ -21,45 +11,43 @@ const ChatSystem = () => {
         }
     }, [messages]);
 
-    const loadMoreMessages = () => {
-        setIsLoading(true);
-
-        // Simulate loading older messages
-        setTimeout(() => {
-            const olderMessages = [
-                { id: 5, sender: 'Therapist', message: 'Older message 1' },
-                { id: 6, sender: 'User', message: 'Older message 2' },
-                // Add more older messages as needed
-            ];
-
-            // Check for duplicates before adding
-            setMessages(prevMessages => {
-                const existingIds = new Set(prevMessages.map(msg => msg.id));
-                const newMessages = olderMessages.filter(msg => !existingIds.has(msg.id));
-                return [...newMessages, ...prevMessages];
-            });
-
-            // Ensure the view stays at the top
-            if (chatContainerRef.current) {
-                chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight - chatContainerRef.current.clientHeight;
-            }
-
-            setIsLoading(false);
-        }, 1000); // Simulate a 1-second loading time
-    };
-
-    const handleSendMessage = () => {
+    const handleSendMessage = async () => {
         if (newMessage.trim() === '') return;
 
         const userMessage = { id: Date.now(), sender: 'User', message: newMessage };
         setMessages([...messages, userMessage]);
         setNewMessage('');
 
-        // Simulate chatbot response
-        setTimeout(() => {
-            const botMessage = { id: Date.now() + 1, sender: 'Therapist', message: 'auto reply' };
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: newMessage })
+            });
+
+            const data = await response.json();
+            if (data.quit) {
+                window.location.href = "/output";
+                return;
+            }
+
+            const botMessage = { id: Date.now() + 1, sender: 'Therapist', message: data.response };
             setMessages(prevMessages => [...prevMessages, botMessage]);
-        }, 500);
+        } catch (error) {
+            console.error('Error sending message:', error);
+            // Handle error (e.g., show error message to the user)
+        }
+    };
+
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            if (!e.shiftKey) {
+                e.preventDefault();
+                handleSendMessage();
+            }
+        }
     };
 
     return (
@@ -67,13 +55,7 @@ const ChatSystem = () => {
             <div
                 className="chat-history-container"
                 ref={chatContainerRef}
-                onScroll={(e) => {
-                    if (e.target.scrollTop === 0 && !isLoading) {
-                        loadMoreMessages();
-                    }
-                }}
             >
-                {isLoading && <div className="loading-spinner">Loading...</div>}
                 {messages.map(msg => (
                     <div key={msg.id} className={`chat-message ${msg.sender === 'User' ? 'user-message' : 'therapist-message'}`}>
                         <p>{msg.message}</p>
@@ -87,6 +69,7 @@ const ChatSystem = () => {
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
                     rows={2}
+                    onKeyPress={handleKeyPress}
                 />
                 <button className="send-button" onClick={handleSendMessage}>Send</button>
             </div>
