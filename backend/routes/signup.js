@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
-
+const UserSessions = require('../models/userSessions');
 const router = express.Router();
 
 router.post('/signup', async (req, res) => {
@@ -65,12 +65,22 @@ router.post('/signup', async (req, res) => {
 
     await newUser.save();
 
-    res.status(201).json({ message: 'User created successfully' });
+    // Create a new session for the user
+    const newUserSession = new UserSessions({
+      userId: newUser._id,
+      nSessions: 0,
+      nextSessionDate: null,
+      mainProblem: '',
+      sessions: {}
+    });
+
+    await newUserSession.save();
+
+    res.status(201).json({ message: 'User and session created successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
-
 module.exports = router;
 
 
