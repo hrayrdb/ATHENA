@@ -5,7 +5,7 @@ import { proxy } from 'valtio';
 // Define your application state
 export const state = proxy({
   intro: true,
-  color: '#EFBD48',
+  color: '#9dd2f2',
   isLogoTexture: true,
   isFullTexture: false,
   logoDecal: './threejs.png',

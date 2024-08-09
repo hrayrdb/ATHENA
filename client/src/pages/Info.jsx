@@ -177,7 +177,7 @@ const Info = () => {
               placeholder="Full Name"
               value={formData.name}
               onChange={handleChange}
-              className="input w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              className="input w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
             />
             {errors.name && <div className="text-red-500 text-sm pl-3">{errors.name}</div>}
 
@@ -187,7 +187,7 @@ const Info = () => {
               placeholder="Year of Birth"
               value={formData.yearOfBirth}
               onChange={handleChange}
-              className="input w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              className="input w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
             />
             {errors.yearOfBirth && <div className="text-red-500 text-sm pl-3">{errors.yearOfBirth}</div>}
 
@@ -195,7 +195,7 @@ const Info = () => {
               name="educationLevel"
               value={formData.educationLevel}
               onChange={handleChange}
-              className="input w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              className="input w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
             >
               <option value="">Select Education Level</option>
               <option value="Primary education">Primary education</option>
@@ -211,7 +211,7 @@ const Info = () => {
               placeholder="Occupation"
               value={formData.occupation}
               onChange={handleChange}
-              className="input w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              className="input w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
             />
             {errors.occupation && <div className="text-red-500 text-sm pl-3">{errors.occupation}</div>}
 
@@ -221,7 +221,7 @@ const Info = () => {
               placeholder="No. of working hours per day"
               value={formData.workingHoursPerDay}
               onChange={handleChange}
-              className="input w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              className="input w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
             />
             {errors.workingHoursPerDay && <div className="text-red-500 text-sm pl-3">{errors.workingHoursPerDay}</div>}
 
@@ -262,7 +262,7 @@ const Info = () => {
               placeholder="No. of siblings"
               value={formData.numberOfSiblings}
               onChange={handleChange}
-              className="input w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              className="input w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
             />
             {errors.numberOfSiblings && <div className="text-red-500 text-sm pl-3">{errors.numberOfSiblings}</div>}
 
@@ -270,7 +270,7 @@ const Info = () => {
               name="relationshipStatus"
               value={formData.relationshipStatus}
               onChange={handleChange}
-              className="input w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              className="input w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
             >
               <option value="">Select Relationship Status</option>
               <option value="Single">Single</option>
@@ -288,7 +288,7 @@ const Info = () => {
               placeholder="No. of children"
               value={formData.numberOfChildren}
               onChange={handleChange}
-              className="input w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              className="input w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
             />
             {errors.numberOfChildren && <div className="text-red-500 text-sm pl-3">{errors.numberOfChildren}</div>}
 
@@ -302,12 +302,15 @@ const Info = () => {
                 borderRadius: '5px',
                 border: '1px solid #ccc',
                 fontSize: '16px',
-                marginLeft: '48px'
+                marginLeft: '48px',
+                backgroundColor: '#1A1A1A',
+
               }}
               containerStyle={{
                 width: '100%',
               }}
               buttonStyle={{
+                color: '#000',
                 marginLeft: '0',
                 position: 'absolute',
               }}

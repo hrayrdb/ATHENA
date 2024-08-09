@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const ChatSystem = () => {
+const ChatSystem = ({ userId }) => {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
+    const [isInitialized, setIsInitialized] = useState(false);
+    const [loading, setLoading] = useState(true);
     const chatContainerRef = useRef(null);
 
     useEffect(() => {
@@ -10,6 +12,33 @@ const ChatSystem = () => {
             chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
         }
     }, [messages]);
+
+    useEffect(() => {
+        const initializeChat = async () => {
+            try {
+                console.log(`Initializing chat for user_id: ${userId}`);
+                const response = await fetch(`http://127.0.0.1:5000/chat?user_id=${userId}`);
+                if (response.ok) {
+                    setIsInitialized(true);
+                    localStorage.setItem('chatInitialized', 'true');
+                    console.log("Chat initialized successfully");
+                } else {
+                    console.error('Failed to initialize chat.');
+                }
+            } catch (error) {
+                console.error('Error initializing chat:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        const chatInitialized = localStorage.getItem('chatInitialized');
+        if (!chatInitialized && userId) {
+            initializeChat();
+        } else {
+            setLoading(false); // Ensure loading state is updated
+        }
+    }, [userId]);
 
     const handleSendMessage = async () => {
         if (newMessage.trim() === '') return;
@@ -49,6 +78,19 @@ const ChatSystem = () => {
             }
         }
     };
+
+    if (loading) {
+        return (
+            <div className="sessioninfo-container">
+                <div className="sessioninfo-header">
+                    <h2>Chat</h2>
+                </div>
+                <div className="sessioninfo-content">
+                    <h1 className="loading-text"><strong>Loading ...</strong></h1>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="chat-system-container">

@@ -10,15 +10,14 @@ const ConfirmationDialog = ({ message = "ARE YOU SURE?", onConfirm, onCancel }) 
             <div className="absolute inset-0 bg-black opacity-70"></div>
             
             {/* Dialog */}
-            <motion.div className="relative bg-white p-6 rounded-lg shadow-lg z-10" {...fadeAnimation}>
+            <motion.div className="relative bg-white p-6 rounded-lg shadow-lg z-10 text-n-8" {...fadeAnimation}>
                 <div className="dialog-content">
-                    <p style={{ fontFamily: 'Dharma-Gothic-E-Light-Italic', fontSize: '30px' }}>{message}</p>
+                    <p style={{fontWeight: 'bold', fontSize: '1.25rem' }}>{message}</p>
                     <div className="button-container flex">
                         <CustomButton
                             handleClick={onConfirm}
                             type="filled"
                             title="YES"
-                            customStyles="w-full px-4 py-2.5 font-bold text-sm"
                         />
                         <div className='px-4'></div>
                         <CustomButton

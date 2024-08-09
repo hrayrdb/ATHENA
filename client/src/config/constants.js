@@ -1,27 +1,27 @@
-import {  fileIcon, ai, mic ,chat , info , timer , typing } from "../assets";
-
+// src/config/constants.js
 export const SessionTabs = [
   {
     name: "chat",
-    icon: chat,
+    icon: "ChatIcon",
   },
   {
     name: "sessioninfo",
-    icon: info,
+    icon: "InfoIcon",
   },
   {
     name: "timer",
-    icon: timer,
+    icon: "TimerIcon",
   },
 ];
 
 export const InputTabs = [
-  // {
-  //   name: "text",
-  //   icon: typing,
-  // },
   {
     name: "mic",
-    icon: mic,
+    icon: "MicIcon",
   },
+  // Uncomment if you want to use the text icon
+  // {
+  //   name: "text",
+  //   icon: "TextFieldsIcon",
+  // },
 ];

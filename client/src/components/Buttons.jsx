@@ -1,3 +1,4 @@
+// src/containers/Buttons.js
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSnapshot } from 'valtio';
@@ -10,38 +11,13 @@ import { SessionTabs, InputTabs } from '../config/constants';
 
 import IconButton from '@mui/material/IconButton';
 import MicIcon from '@mui/icons-material/Mic';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import MenuIcon from '@mui/icons-material/Menu';
-import { styled } from '@mui/material/styles';
 
 import ConfirmationDialog from '../components/ConfirmationDialog';
 import SessionInfo from '../components/SessionInfo';
-
-// Custom styled Menu component
-const CustomMenu = styled(Menu)(({ theme }) => ({
-    '& .MuiPaper-root': {
-        backgroundColor: '#FFF',
-        color: '#111',
-        borderRadius: '8px',
-        boxShadow: '0 5px 15px rgba(0, 0, 0, 0.3)',
-        fontFamily: 'Dharma-Gothic-E-Bold',
-        padding: '20px',
-        minWidth: '200px',
-    },
-}));
-
-// Custom styled MenuItem component
-const CustomMenuItem = styled(MenuItem)(({ theme }) => ({
-    '&:hover': {
-        backgroundColor: '#999',
-    },
-    '& .MuiListItemText-primary': {
-        color: '#fff',
-    },
-    fontFamily: 'Dharma-Gothic-E-Light-Italic',
-    fontSize: '30px',
-}));
+import CustomMenu from '../components/CustomMenu'; 
+import SettingsDialog from './SettingsDialog';
+import ProfileDialog from './ProfileDialog';
 
 const Buttons = () => {
     const snap = useSnapshot(userState);
@@ -59,7 +35,8 @@ const Buttons = () => {
 
     const [recognizedText, setRecognizedText] = useState('');
     const [showLogoutDialog, setShowLogoutDialog] = useState(false);
-    const [showSwitchViewDialog, setShowSwitchViewDialog] = useState(false);
+    const [showProfileDialog, setShowProfileDialog] = useState(false);
+    const [showSettingsDialog, setShowSettingsDialog] = useState(false);
 
     const sessionTabRef = useRef(null);
     const inputTabRef = useRef(null);
@@ -131,9 +108,9 @@ const Buttons = () => {
     const generateSessionTabContent = () => {
         switch (activeSessionTab) {
             case "chat":
-                return <ChatSystem />
+                return <ChatSystem userId={snap.user._id} />
             case "sessioninfo":
-                return <SessionInfo user={snap.user} />; // Pass user data as props
+                return <SessionInfo user={snap.user} />;
             case "text":
                 return <InputText
                     prompt={prompt}
@@ -144,21 +121,6 @@ const Buttons = () => {
             default:
                 return null;
         }
-    }
-
-    const generateInputTabContent = () => {
-        // Handle the mic button directly within the tab itself
-        return (
-            <Tab
-                key="mic"
-                tab={{ name: "mic", icon: "🎙️" }}
-                handleClick={() => setActiveInputTab("mic")}
-                onMouseDown={handleMicPress}
-                onMouseUp={handleMicRelease}
-                onTouchStart={handleMicPress}
-                onTouchEnd={handleMicRelease}
-            />
-        );
     }
 
     useEffect(() => {
@@ -211,16 +173,10 @@ const Buttons = () => {
         handleMenuClose();
         switch (action) {
             case 'profile':
-                navigate('/profile');
+                setShowProfileDialog(true);
                 break;
             case 'settings':
-                navigate('/settings');
-                break;
-            case 'record':
-                navigate('/record');
-                break;
-            case 'switchview':
-                setShowSwitchViewDialog(true);
+                setShowSettingsDialog(true);
                 break;
             case 'logout':
                 setShowLogoutDialog(true);
@@ -293,26 +249,11 @@ const Buttons = () => {
                         <MenuIcon />
                     </IconButton>
                     <CustomMenu
-                        id="menu-appbar"
                         anchorEl={anchorEl}
-                        anchorOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                        keepMounted
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
                         open={open}
                         onClose={handleMenuClose}
-                    >
-                        <CustomMenuItem onClick={() => handleMenuItemClick('profile')}>PROFILE</CustomMenuItem>
-                        <CustomMenuItem onClick={() => handleMenuItemClick('record')}>MEDICAL RECORD</CustomMenuItem>
-                        <CustomMenuItem onClick={() => handleMenuItemClick('settings')}>SETTINGS</CustomMenuItem>
-                        <CustomMenuItem onClick={() => handleMenuItemClick('switchview')}>SWITCH VIEW</CustomMenuItem>
-                        <CustomMenuItem onClick={() => handleMenuItemClick('logout')}>LOGOUT</CustomMenuItem>
-                    </CustomMenu>
+                        handleMenuItemClick={handleMenuItemClick}
+                    />
                 </motion.div>
 
                 <motion.div
@@ -325,7 +266,7 @@ const Buttons = () => {
                         tab.name === "mic" ? (
                             <button
                                 key={tab.name}
-                                className="mic-button"
+                                className="mic-btn"
                                 onMouseDown={handleMicPress}
                                 onMouseUp={handleMicRelease}
                                 onTouchStart={handleMicPress}
@@ -352,18 +293,22 @@ const Buttons = () => {
                     />
                 )}
 
-                {/* Confirmation dialog for switch view */}
-                {showSwitchViewDialog && (
-                    <ConfirmationDialog
-                        message="Do you really want to switch the view to text chat mode?"
-                        onConfirm={handleConfirmSwitchView}
-                        onCancel={handleCancelSwitchView}
-                    />
-                )}
+                {/* Dialog for Profile */}
+                <ProfileDialog
+                    open={showProfileDialog}
+                    onClose={() => setShowProfileDialog(false)}
+                    user={snap.user}
+                />
+
+                {/* Dialog for Settings */}
+                <SettingsDialog
+                    open={showSettingsDialog}
+                    onClose={() => setShowSettingsDialog(false)}
+                />
+
             </>
         </AnimatePresence>
     );
 };
 
 export default Buttons;
-

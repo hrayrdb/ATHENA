@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const signupRoutes = require('./routes/signup');
 const loginRoutes = require('./routes/login');
 const verifyRoutes = require('./routes/verifyToken');
+const sessionInfoRoutes = require('./routes/sessionInfo'); 
+const deleteAccountRoutes = require('./routes/deleteAccount');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
@@ -19,6 +21,9 @@ app.use(bodyParser.json());
 app.use('/api', signupRoutes);
 app.use('/api', loginRoutes); 
 app.use('/api', verifyRoutes);
+app.use('/api', sessionInfoRoutes);
+app.use('/api', deleteAccountRoutes); 
+
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)

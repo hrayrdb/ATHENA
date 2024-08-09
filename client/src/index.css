@@ -1,7 +1,147 @@
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,600;1,900&display=swap");
 @import url("https://rsms.me/inter/inter.css");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/* Define your custom font */
+:root {
+  --font-sora: "Sora", sans-serif;
+  --font-code: "Source Code Pro", monospace;
+  --font-grotesk: "Space Grotesk", sans-serif;
+  color-scheme: dark;
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+@layer base {
+  html, body {
+    @apply font-sans bg-n-8 text-n-1 text-base;
+    font-family: var(--font-sora); /* Ensure Sora is the primary font */
+    height: 100%; /* Ensure the body and html elements take the full height */
+    overflow-x: hidden; 
+  }
+
+  body {
+    min-height: 100vh; /* Ensure the body has a minimum height */
+  }
+}
+
+.rotate-45 {
+  @apply rotate-[45deg];
+}
+
+.rotate-90 {
+  @apply rotate-[90deg];
+}
+
+.rotate-135 {
+  @apply rotate-[135deg];
+}
+
+.rotate-180 {
+  @apply rotate-[180deg];
+}
+
+.rotate-225 {
+  @apply rotate-[225deg];
+}
+
+.rotate-270 {
+  @apply rotate-[270deg];
+}
+
+.rotate-315 {
+  @apply rotate-[315deg];
+}
+
+.rotate-360 {
+  @apply rotate-[360deg];
+}
+
+.-rotate-45 {
+  @apply rotate-[-45deg];
+}
+
+.-rotate-90 {
+  @apply rotate-[-90deg];
+}
+
+.-rotate-135 {
+  @apply rotate-[-135deg];
+}
+
+.-rotate-180 {
+  @apply rotate-[-180deg];
+}
+
+.-rotate-225 {
+  @apply rotate-[-225deg];
+}
+
+.-rotate-270 {
+  @apply rotate-[-270deg];
+}
+
+.-rotate-315 {
+  @apply rotate-[-315deg];
+}
+
+.-rotate-360 {
+  @apply rotate-[-360deg];
+}
+
+
+
+
+
+
+
+/* TYPING */
+
+
+@keyframes typing {
+  0% {
+    width: 0;
+  }
+  50% {
+    width: 54%;
+  }
+  100% {
+    width: 0;
+  }
+}
+
+@keyframes blink-caret {
+  from, to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: black;
+  }
+}
+
+.typing-effect {
+  overflow: hidden;
+  border-right: .15em solid black; /* Adjust color as needed */
+  white-space: nowrap;
+  animation: 
+    typing 4s steps(24, end) infinite, /* Adjust steps to match the character count */
+    blink-caret .75s step-end infinite;
+  display: inline-block;
+  max-width: 100%; /* Ensures no extra space is added */
+}
+
+
+
+/* -------------------------------------------------------------------------------- */
+
+
+
 @font-face {
   font-family: 'Dharma-Gothic-E-Bold';
   src: url('./assets/fonts/DharmaGothicEBold.otf') format('opentype');
@@ -24,34 +164,204 @@
 }
 
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 html {
   font-family: "Dharma-Gothic-E-Bold", "Dharma-Gothic-E-ExBold-Italic", "Dharma-Gothic-E-Light-Italic", "Inter", sans-serif;
 }
 
-@supports (font-variation-settings: normal) {
-  html {
-    font-family: "Inter var", sans-serif;
-  }
-}
+
 
 .app {
-  @apply relative w-full h-screen overflow-hidden;
+  @apply relative w-full h-screen ;
 }
 
+
+
+
+/* HOME */
+
 .home {
-  @apply w-full xl:h-full flex xl:justify-between justify-start items-start flex-col xl:py-8 xl:px-36 sm:p-8 p-6 max-xl:gap-7 absolute z-10;
+  @apply w-full h-screen flex items-center justify-center relative z-10;
+  background: url('./assets/ai.png') no-repeat center center fixed;
+  background-size: cover;
+}
+
+.home::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(10px); 
+  -webkit-backdrop-filter: blur(10px); /* Add -webkit-backdrop-filter for Safari */
+  z-index: -1;
+}
+
+.content-wrapper {
+  @apply flex flex-col xl:flex-row items-center justify-center w-full max-w-7xl gap-10 px-4;
+  position: relative;
+  z-index: 1;
 }
 
 .home-content {
-  @apply w-full h-full flex-1 xl:justify-center justify-start flex flex-col gap-10;
+  @apply flex flex-col items-center justify-center w-full max-w-md gap-10;
+  position: relative;
+  z-index: 1;
 }
 
+.canvas-container {
+  @apply w-full max-w-lg h-96 mt-10 xl:mt-0 mx-auto xl:mx-0;
+  position: relative;
+  z-index: 1;
+}
+
+/* Additional responsive styling */
+@media (min-width: 768px) {
+  .canvas-container {
+    @apply h-96;
+  }
+}
+
+@media (min-width: 1024px) {
+  .canvas-container {
+    @apply max-w-2xl h-[500px];
+  }
+}
+
+/* Add space at the top on smaller screens */
+@media (max-width: 768px) {
+  .home {
+    @apply pt-20; /* Adjust the value as needed for top padding */
+  }
+}
+
+
+
+
+
+/* SIGNUP */
+.signup {
+  @apply w-full h-screen flex items-center justify-center relative z-10;
+}
+
+.signup-content {
+  @apply flex flex-col items-center justify-center w-full max-w-md gap-10 text-[#e0e0e0];
+}
+
+.signup .head-text {
+  color: #e0e0e0;
+}
+
+::placeholder {
+  color: #888;
+  /* Light gray color for placeholders */
+  opacity: 1;
+  /* Override default opacity */
+}
+
+input:-ms-input-placeholder {
+  color: #888;
+  /* Light gray color for placeholders */
+}
+
+input::-ms-input-placeholder {
+  color: #888;
+  /* Light gray color for placeholders */
+}
+
+input::placeholder {
+  color: #888;
+  /* Light gray color for placeholders */
+}
+
+.signup input {
+  color: #e0e0e0;
+  background-color: #2a2a2a;
+  /* Light gray background color for input fields */
+  border: 1px solid #e0e0e0;
+  /* Light gray border color for input fields */
+}
+
+.signup .login-text {
+  color: #e1b761;
+}
+
+
+/* END */
+
+
+
+
+
+/* LOGIN */
+
+.login {
+  @apply w-full h-screen flex items-center justify-center relative z-10;
+}
+
+.login-content {
+  @apply flex flex-col items-center justify-center w-full max-w-md gap-10 text-[#e0e0e0];
+}
+
+.login .head-text {
+  color: #e0e0e0;
+}
+
+::placeholder {
+  color: #888;
+  /* Light gray color for placeholders */
+  opacity: 1;
+  /* Override default opacity */
+}
+
+input:-ms-input-placeholder {
+  color: #888;
+  /* Light gray color for placeholders */
+}
+
+input::-ms-input-placeholder {
+  color: #888;
+  /* Light gray color for placeholders */
+}
+
+input::placeholder {
+  color: #888;
+  /* Light gray color for placeholders */
+}
+
+.login input {
+  color: #e0e0e0;
+  background-color: #2a2a2a;
+  /* Light gray background color for input fields */
+  border: 1px solid #e0e0e0;
+  /* Light gray border color for input fields */
+}
+
+/* Set the "Signup" text color to the provided color */
+.login .signup-text {
+  color: #e1b761;
+}
+
+/* END */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .head-text {
-  @apply xl:text-[10rem] text-[6rem] xl:leading-[11rem] leading-[7rem] font-black text-black;
+  @apply xl:text-[10rem] text-[4.5rem] xl:leading-[11rem] leading-[7rem] font-black text-black;
+
 }
 
 .download-btn {
@@ -62,11 +372,18 @@ html {
   @apply glassmorphism w-16 border-[2px] rounded-lg flex flex-col justify-center items-center ml-1 py-4 gap-4;
 }
 
+
+
+
+
+
+
+
 /*              MICROPHONE              */
-.mic-button {
+/* .mic-button {
   @apply text-white rounded-full p-4 shadow-lg focus:outline-none flex items-center justify-center;
-  background-color: rgba(255, 255, 255, 0.501); /* White background */
-  border: 2px solid #212121; /* Golden border */
+  background-color: rgba(255, 255, 255, 0.501);
+  border: 2px solid #212121;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
 }
@@ -76,16 +393,27 @@ html {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
-.mic-button:active, .mic-button.pressed {
+.mic-button:active,
+.mic-button.pressed {
   transform: scale(1);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  background-color: #f8f8f8c1; /* Slightly darker white to indicate active state */
+  background-color: #f8f8f8c1;
 }
 
 .mic-icon {
-  font-size: 2.5rem; /* Adjust the icon size */
-  color: #212121; /* Golden color for the icon */
+  font-size: 2.5rem;
+  color: #212121;
 }
+
+
+
+
+ */
+
+
+
+
+
 
 
 /*              CHAT SYSTEM              */
@@ -115,13 +443,16 @@ html {
 }
 
 .chat-input {
-  @apply flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500;
+  @apply flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300;
+  background: #fdfdfd;
   resize: none;
+  color: #1A1A1A; 
+
 }
 
 .send-button {
-  @apply ml-2 px-4 py-2 text-white rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500;
-  background: #EFBD48;
+  @apply ml-2 px-4 py-2 text-white rounded-lg hover:bg-blue-300 focus:outline-none focus:ring-2 focus:ring-gray-900;
+  background: #9DD2F2;
 }
 
 .chat-message {
@@ -130,20 +461,25 @@ html {
 }
 
 .user-message {
-  @apply ml-auto text-white;
-  background: #EFBD48;
+  @apply ml-auto text-n-8;
+  background: #9DD2F2;
+
 }
 
 .therapist-message {
-  @apply mr-auto bg-gray-300 text-black;
+  @apply mr-auto bg-gray-300 text-n-8;
 }
 
 .loading-spinner {
-  @apply flex justify-center items-center text-gray-500 my-2;
+  @apply flex justify-center items-center text-blue-300 my-2;
 }
 
 
 /*              CHAT SYSTEM ( END )              */
+
+
+
+
 
 
 
@@ -174,7 +510,7 @@ html {
 
 .sessioninfo-container {
   @apply absolute left-full ml-3 glassmorphism p-3 w-[195px] h-[220px] flex flex-col rounded-md;
-  font-family: 'Dharma-Gothic-E-Light-Italic', sans-serif;
+  /* font-family: 'Dharma-Gothic-E-Light-Italic', sans-serif; */
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -187,8 +523,8 @@ html {
 }
 
 .sessioninfo-header {
-  font-size: 54px;
-  background: #EFBD48;
+  font-size: 1.5rem;
+  background: #9DD2F2;
   border-radius: 10px 10px 0 0;
   padding: 10px;
   text-align: center;
@@ -210,20 +546,68 @@ html {
 
 .sessioninfo-content p {
   margin: 5px 0;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   /* Increase from 1rem to 1.25rem */
-  color: #EFBD48;
+  color: #9DD2F2;
 }
 
 .sessioninfo-content p strong {
-  font-size: 1.5rem;
+  font-size: 1rem;
   color: #333;
 }
 
 
+/* .tab-btn {
+} */
+
 .tab-btn {
-  @apply w-14 h-14 flex justify-center items-center cursor-pointer select-none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background-color: #9DD2F2;
+  border-radius: 12px;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  cursor: pointer;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
 }
+
+.tab-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.tab-icon {
+  font-size: 24px;
+  color: #1A1A1A;
+}
+
+.mic-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background-color: #d5d5d5;
+  border-radius: 33%; /* Make it circular */
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  cursor: pointer;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.mic-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.mic-icon {
+  font-size: 24px;
+  color: #1A1A1A;
+}
+
+
+
 
 
 .glassmorphism {
@@ -287,6 +671,8 @@ input[type="file"] {
 
 body {
   margin: 0;
+  background-color: #1a1a1a;
+
 }
 
 .container {
@@ -338,22 +724,14 @@ body {
   font-size: 15px;
 }
 
-/* width */
-::-webkit-scrollbar {
-  width: 0px;
-}
-
-/* Track */
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
   background: transparent;
 }
 
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: transparent;
 }
@@ -440,9 +818,7 @@ span {
 
 
 .hamburger-menu {
-  font-family: 'MyFont', sans-serif;
   font-size: 1.2rem;
-  /* Adjust as needed */
   background-color: rgba(255, 255, 255, 0.9);
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 8px;
@@ -450,7 +826,6 @@ span {
 
 .hamburger-menu .MuiPaper-root {
   background-color: inherit;
-  /* Ensure the background color applies */
 }
 
 .hamburger-menu .MuiMenuItem-root {
@@ -515,3 +890,170 @@ span {
 }
 
 
+.loading-text {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #1A1A1A;
+}
+
+.or-divider {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.or-divider-line {
+  flex-grow: 1;
+  height: 1px;
+  background-color: #ccc;
+  /* You can change the color to match your design */
+  margin: 0 10px;
+  /* Adjust the spacing as needed */
+}
+
+.or-divider-text {
+  white-space: nowrap;
+  color: #888;
+  /* You can change the color to match your design */
+}
+
+
+
+/* ProfileDialog.css */
+
+/* Header Styling */
+.profile-dialog-header {
+  font-size: 1.5rem;
+  background: #9DD2F2;
+  border-radius: 10px 10px 0 0;
+  padding: 10px;
+  text-align: center;
+}
+
+.profile-dialog-header h2 {
+  font-size: 1.5rem;
+  color: white;
+  margin: 0;
+}
+
+/* Content Box Styling */
+.profile-dialog-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 2px 30px 0 rgba(31, 38, 135, 0.07);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.profile-dialog-item {
+  padding: 8px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.profile-dialog-item:last-child {
+  border-bottom: none;
+}
+
+.profile-dialog-button {
+  background-color: #9DD2F2;
+  color: #9DD2F2;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.profile-dialog-button:hover {
+  background-color: #9DD2F2;
+}
+
+/* Rounded Dialog */
+.rounded-dialog .MuiPaper-root {
+  border-radius: 20px !important;
+}
+
+
+
+
+
+
+
+
+
+.settings-dialog-container {
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Adjusted for smoother animation */
+}
+
+.slide-left {
+  transform: translateX(-100%);
+}
+
+
+
+
+/* Settings Dialog Styles */
+.settings-dialog-header {
+  font-size: 1.5rem;
+  background: #9DD2F2;
+  border-radius: 10px 10px 0 0;
+  padding: 10px;
+  text-align: center;
+}
+
+.settings-dialog-header h2 {
+  font-size: 1.5rem;
+  color: white;
+  margin: 0;
+}
+
+.settings-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 2px 30px 0 rgba(31, 38, 135, 0.07);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.settings-dialog-item {
+  padding: 16px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center; /* Ensure vertical alignment */
+  justify-content: space-between; /* Ensure elements are spaced out */
+}
+
+.settings-dialog-item:last-child {
+  border-bottom: none;
+}
+
+.bordered-box {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.settings-dialog-button {
+  background-color: #1E90FF;
+  color: white;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.settings-dialog-button:hover {
+  background-color: #104E8B;
+}
+
+/* Ensure Sora font is applied */
+.font-sora {
+  font-family: 'Sora';
+}
