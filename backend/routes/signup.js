@@ -57,10 +57,10 @@ router.post('/signup', async (req, res) => {
       emergencyContact,
       isAnxious,
       anxietySeverity,
-      anxietySymptoms: typeof anxietySymptoms === 'string' ? JSON.parse(anxietySymptoms) : anxietySymptoms,
+      anxietySymptoms: {},
       isDepressed,
       depressionSeverity,
-      depressionSymptoms: typeof depressionSymptoms === 'string' ? JSON.parse(depressionSymptoms) : depressionSymptoms
+      depressionSymptoms: {}
     });
 
     await newUser.save();
@@ -96,3 +96,4 @@ router.post('/check-email', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+

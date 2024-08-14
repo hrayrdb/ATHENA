@@ -120,7 +120,6 @@ import { Environment, Center } from '@react-three/drei';
 
 import { useNavigate } from 'react-router-dom';
 
-import { Desk } from '../components/models/Desk';
 
 
 const CanvasModel = () => {

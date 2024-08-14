@@ -10,9 +10,12 @@ import { CuboidCollider, Physics, RigidBody } from '@react-three/rapier';
 import { ConvaiFPS } from './fps/convaiFPS';
 import { Nikhil } from './models/Nikhil';
 import { Athena } from './models/Athena';
+import { Julia } from './models/Julia';
 
 export const Experience = ({ client }) => {
   const [gravity, setGravity] = useState([0, 0, 0]);
+  const [isTalking, setIsTalking] = useState(true)
+
   useEffect(() => {
     setGravity([0, -9.81, 0]);
   }, []);
@@ -43,7 +46,8 @@ export const Experience = ({ client }) => {
 
 
           {/* <Athena client={client} /> */}
-          <Nikhil client={client} />
+          {/* <Nikhil client={client} /> */}
+          <Julia client={client} isTalking={isTalking} />
           <Grid followCamera infiniteGrid fadeDistance={50} />
           <RigidBody type="fixed">
             <CuboidCollider args={[5, 5, 0.1]} position={[0, 1.5, -3]} />

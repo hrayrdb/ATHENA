@@ -1,4 +1,3 @@
-// src/containers/Buttons.js
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSnapshot } from 'valtio';
@@ -15,9 +14,11 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 import ConfirmationDialog from '../components/ConfirmationDialog';
 import SessionInfo from '../components/SessionInfo';
-import CustomMenu from '../components/CustomMenu'; 
+import CustomMenu from '../components/CustomMenu';
 import SettingsDialog from './SettingsDialog';
 import ProfileDialog from './ProfileDialog';
+import DepressionFormDialog from './Fuzzy/DepressionFormDialog';
+import AnxietyFormDialog from './Fuzzy/AnxietyFormDialog';
 
 const Buttons = () => {
     const snap = useSnapshot(userState);
@@ -294,12 +295,12 @@ const Buttons = () => {
                 )}
 
                 {/* Dialog for Profile */}
-                <ProfileDialog
+                {/* <ProfileDialog
                     open={showProfileDialog}
                     onClose={() => setShowProfileDialog(false)}
                     user={snap.user}
-                />
-
+                /> */}
+                <DepressionFormDialog open={showProfileDialog} />
                 {/* Dialog for Settings */}
                 <SettingsDialog
                     open={showSettingsDialog}

@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useSnapshot } from 'valtio';
+import { state, userState } from '../store';
 
 const ChatSystem = ({ userId }) => {
     const [messages, setMessages] = useState([]);
@@ -6,6 +8,7 @@ const ChatSystem = ({ userId }) => {
     const [isInitialized, setIsInitialized] = useState(false);
     const [loading, setLoading] = useState(true);
     const chatContainerRef = useRef(null);
+    const snap = useSnapshot(userState);
 
     useEffect(() => {
         if (chatContainerRef.current) {
@@ -40,6 +43,39 @@ const ChatSystem = ({ userId }) => {
         }
     }, [userId]);
 
+
+    const showForms = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/session-info?user_id=${snap.user._id}`);
+            if (response.ok) {
+                const data = await response.json();
+                const nSessions = data.n_sessions;
+
+                if (nSessions === 3) {
+                    // Check if the user is depressed or anxious
+                    const { isDepressed, isAnxious } = snap.user;
+
+                    if (isDepressed === 'Depression' || isDepressed === 'Not sure') {
+                        // Show depression dialog
+                        alert('Show depression dialog');
+                        // TODO: Implement the dialog
+                    }
+
+                    if (isAnxious === 'Anxiety' || isAnxious === 'Not sure') {
+                        // Show anxiety dialog
+                        alert('Show anxiety dialog');
+                        // TODO: Implement the dialog
+                    }
+                }
+            } else {
+                console.error('Failed to fetch session info');
+            }
+        } catch (error) {
+            console.error('Error fetching session info:', error);
+        }
+    };
+
+
     const handleSendMessage = async () => {
         if (newMessage.trim() === '') return;
 
@@ -58,7 +94,34 @@ const ChatSystem = ({ userId }) => {
 
             const data = await response.json();
             if (data.quit) {
-                window.location.href = "/output";
+                try {
+                    const userResponse = await fetch('http://localhost:5000/api/get-data', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ email: snap.user.email }),  // Assuming email is stored in snap.user
+                    });
+
+                    if (userResponse.ok) {
+                        const userData = await userResponse.json();
+
+                        userState.user = userData;
+
+                        console.log('User data updated in snap:', userData);
+
+                        showForms();
+                    } else {
+                        console.error('Failed to fetch user data');
+                        localStorage.removeItem('chatInitialized');
+
+                    }
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                    localStorage.removeItem('chatInitialized');
+
+                }
+                localStorage.removeItem('chatInitialized');
                 return;
             }
 
