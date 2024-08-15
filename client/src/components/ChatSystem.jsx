@@ -4,8 +4,7 @@ import { userState } from '../store';
 import DepressionFormDialog from './Fuzzy/DepressionFormDialog';
 import AnxietyFormDialog from './Fuzzy/AnxietyFormDialog';
 
-const ChatSystem = ({ userId }) => {
-    const [messages, setMessages] = useState([]);
+const ChatSystem = ({ userId, client, messages, setMessages }) => {
     const [newMessage, setNewMessage] = useState('');
     const [isInitialized, setIsInitialized] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -47,8 +46,6 @@ const ChatSystem = ({ userId }) => {
         }
     }, [userId]);
 
-
-
     const showForms = async () => {
         try {
             const response = await fetch(`http://localhost:5000/api/session-info?user_id=${snap.user._id}`);
@@ -61,7 +58,6 @@ const ChatSystem = ({ userId }) => {
                 console.log("isDepressed:", isDepressed, "isAnxious:", isAnxious);
 
                 if (nSessions === 3) {
-
                     if (isDepressed === 'Depression' || isDepressed === 'Not sure') {
                         setShowDepressionForm(true);
                     }
@@ -78,13 +74,11 @@ const ChatSystem = ({ userId }) => {
         }
     };
 
+    const handleSendMessage = async (messageContent = newMessage) => {
+        if (messageContent.trim() === '') return;
 
-
-    const handleSendMessage = async () => {
-        if (newMessage.trim() === '') return;
-
-        const userMessage = { id: Date.now(), sender: 'User', message: newMessage };
-        setMessages([...messages, userMessage]);
+        const userMessage = { id: Date.now(), sender: 'User', message: messageContent };
+        setMessages((prevMessages) => [...prevMessages, userMessage]);
         setNewMessage('');
 
         try {
@@ -93,7 +87,7 @@ const ChatSystem = ({ userId }) => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ message: newMessage })
+                body: JSON.stringify({ message: messageContent })
             });
 
             const data = await response.json();
@@ -130,7 +124,7 @@ const ChatSystem = ({ userId }) => {
             }
 
             const botMessage = { id: Date.now() + 1, sender: 'Therapist', message: data.response };
-            setMessages(prevMessages => [...prevMessages, botMessage]);
+            setMessages((prevMessages) => [...prevMessages, botMessage]);
         } catch (error) {
             console.error('Error sending message:', error);
             // Handle error (e.g., show error message to the user)

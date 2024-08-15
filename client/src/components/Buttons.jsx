@@ -19,8 +19,9 @@ import SettingsDialog from './SettingsDialog';
 import ProfileDialog from './ProfileDialog';
 import DepressionFormDialog from './Fuzzy/DepressionFormDialog';
 import AnxietyFormDialog from './Fuzzy/AnxietyFormDialog';
+import SessionTimer from '../components/SessionTimer'; // Import the timer component
 
-const Buttons = () => {
+const Buttons = ({ client, messages, setMessages }) => {
     const snap = useSnapshot(userState);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
@@ -64,9 +65,65 @@ const Buttons = () => {
     const handleSubmit = (action) => {
         if (action === 'send') {
             console.log(prompt);
+            handleSendMessage(prompt);
             setPrompt('');
         } else if (action === 'clear') {
             setPrompt('');
+        }
+    };
+
+    const handleSendMessage = async (messageContent) => {
+        if (!messageContent || messageContent.trim() === '') return;
+
+        const userMessage = { id: Date.now(), sender: 'User', message: messageContent };
+        setMessages((prevMessages) => [...prevMessages, userMessage]);
+        setPrompt('');
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: messageContent })
+            });
+
+            const data = await response.json();
+            if (data.quit) {
+                try {
+                    const userResponse = await fetch('http://localhost:5000/api/get-data', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ email: snap.user.email }),
+                    });
+
+                    if (userResponse.ok) {
+                        const userData = await userResponse.json();
+
+                        userState.user = userData;
+
+                        console.log('User data updated in snap:', userData);
+
+                        await showForms();
+                    } else {
+                        console.error('Failed to fetch user data');
+                        localStorage.removeItem('chatInitialized');
+
+                    }
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                    localStorage.removeItem('chatInitialized');
+                }
+                localStorage.removeItem('chatInitialized');
+                return;
+            }
+
+            const botMessage = { id: Date.now() + 1, sender: 'Therapist', message: data.response };
+            setMessages((prevMessages) => [...prevMessages, botMessage]);
+        } catch (error) {
+            console.error('Error sending message:', error);
         }
     };
 
@@ -87,6 +144,9 @@ const Buttons = () => {
             const transcript = event.results[0][0].transcript;
             setRecognizedText(transcript);
             console.log('Recognized text:', transcript);
+
+            // Send recognized text as a message
+            handleSendMessage(transcript);
         };
 
         recognitionInstance.onerror = (event) => {
@@ -111,7 +171,7 @@ const Buttons = () => {
     const generateSessionTabContent = () => {
         switch (activeSessionTab) {
             case "chat":
-                return <ChatSystem userId={snap.user._id} />
+                return <ChatSystem userId={snap.user._id} client={client} messages={messages} setMessages={setMessages} />
             case "sessioninfo":
                 return <SessionInfo user={snap.user} />;
             case "text":
@@ -121,11 +181,13 @@ const Buttons = () => {
                     generatingImg={generatingImg}
                     handleSubmit={handleSubmit}
                 />
+            case "timer": // Third session tab
+                return <SessionTimer />;
             default:
                 return null;
         }
     }
-    
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -231,7 +293,8 @@ const Buttons = () => {
                                 <Tab
                                     key={tab.name}
                                     tab={tab}
-                                    handleClick={() => setActiveSessionTab(tab.name)} />
+                                    handleClick={() => setActiveSessionTab(tab.name)}
+                                />
                             ))}
                             {generateSessionTabContent()}
                         </div>
