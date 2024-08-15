@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSnapshot } from 'valtio';
-import { state, userState } from '../store';
+import { userState } from '../store';
+import DepressionFormDialog from './Fuzzy/DepressionFormDialog';
+import AnxietyFormDialog from './Fuzzy/AnxietyFormDialog';
 
 const ChatSystem = ({ userId }) => {
     const [messages, setMessages] = useState([]);
@@ -9,6 +11,8 @@ const ChatSystem = ({ userId }) => {
     const [loading, setLoading] = useState(true);
     const chatContainerRef = useRef(null);
     const snap = useSnapshot(userState);
+    const [showDepressionForm, setShowDepressionForm] = useState(false);
+    const [showAnxietyForm, setShowAnxietyForm] = useState(false);
 
     useEffect(() => {
         if (chatContainerRef.current) {
@@ -44,27 +48,26 @@ const ChatSystem = ({ userId }) => {
     }, [userId]);
 
 
+
     const showForms = async () => {
         try {
             const response = await fetch(`http://localhost:5000/api/session-info?user_id=${snap.user._id}`);
             if (response.ok) {
                 const data = await response.json();
                 const nSessions = data.n_sessions;
+                console.log("nSessions:", nSessions);
+                const isDepressed = snap.user.isDepressed;
+                const isAnxious = snap.user.isAnxious;
+                console.log("isDepressed:", isDepressed, "isAnxious:", isAnxious);
 
                 if (nSessions === 3) {
-                    // Check if the user is depressed or anxious
-                    const { isDepressed, isAnxious } = snap.user;
 
                     if (isDepressed === 'Depression' || isDepressed === 'Not sure') {
-                        // Show depression dialog
-                        alert('Show depression dialog');
-                        // TODO: Implement the dialog
+                        setShowDepressionForm(true);
                     }
 
                     if (isAnxious === 'Anxiety' || isAnxious === 'Not sure') {
-                        // Show anxiety dialog
-                        alert('Show anxiety dialog');
-                        // TODO: Implement the dialog
+                        setShowAnxietyForm(true);
                     }
                 }
             } else {
@@ -74,6 +77,7 @@ const ChatSystem = ({ userId }) => {
             console.error('Error fetching session info:', error);
         }
     };
+
 
 
     const handleSendMessage = async () => {
@@ -100,7 +104,7 @@ const ChatSystem = ({ userId }) => {
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify({ email: snap.user.email }),  // Assuming email is stored in snap.user
+                        body: JSON.stringify({ email: snap.user.email }),
                     });
 
                     if (userResponse.ok) {
@@ -110,7 +114,7 @@ const ChatSystem = ({ userId }) => {
 
                         console.log('User data updated in snap:', userData);
 
-                        showForms();
+                        await showForms();
                     } else {
                         console.error('Failed to fetch user data');
                         localStorage.removeItem('chatInitialized');
@@ -178,6 +182,19 @@ const ChatSystem = ({ userId }) => {
                 />
                 <button className="send-button" onClick={handleSendMessage}>Send</button>
             </div>
+
+            {showDepressionForm && (
+                <DepressionFormDialog
+                    open={showDepressionForm}
+                    onClose={() => setShowDepressionForm(false)}
+                />
+            )}
+            {showAnxietyForm && (
+                <AnxietyFormDialog
+                    open={showAnxietyForm}
+                    onClose={() => setShowAnxietyForm(false)}
+                />
+            )}
         </div>
     );
 };

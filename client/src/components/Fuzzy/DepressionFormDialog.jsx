@@ -4,7 +4,8 @@ import { useTheme } from '@mui/system';
 
 const DepressionFormDialog = ({ open, onClose }) => {
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Check if the screen is small (mobile)
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const [loading, setLoading] = useState(false);
 
     const questions = [
         {
@@ -198,9 +199,8 @@ const DepressionFormDialog = ({ open, onClose }) => {
         }
     ];
 
-    // Initialize the state with each slider set to 0
     const [answers, setAnswers] = useState(
-        Object.fromEntries(questions.map(q => [q.text, 0])) // Initial value for each question is set to 0 (first option)
+        Object.fromEntries(questions.map(q => [q.text, 0]))
     );
 
     const handleSliderChange = (question, newValue) => {
@@ -219,7 +219,6 @@ const DepressionFormDialog = ({ open, onClose }) => {
 
         const firstMembership = 1 - remainder;
         const secondMembership = remainder;
-
         return {
             firstChoice,
             secondChoice,
@@ -229,6 +228,8 @@ const DepressionFormDialog = ({ open, onClose }) => {
     };
 
     const handleSubmit = async () => {
+        setLoading(true);
+
         try {
             const firstChoices = [];
             const secondChoices = [];
@@ -255,18 +256,18 @@ const DepressionFormDialog = ({ open, onClose }) => {
                 }
             });
 
-            // Only send depression data, leave anxiety data as it is
             const data = {
                 a_options_depression: firstChoices,
                 b_options_depression: secondChoices,
                 a_mfs_depression: firstMemberships,
                 b_mfs_depression: secondMemberships,
-                a_options_anxiety: null, // or keep existing state if you are maintaining it
+                a_options_anxiety: null,
                 b_options_anxiety: null,
                 a_mfs_anxiety: null,
                 b_mfs_anxiety: null
             };
-            console.log(data);
+            console.log('Submitting data:', data);
+
             const response = await fetch('http://127.0.0.1:5000/api/depression-output', {
                 method: 'POST',
                 headers: {
@@ -282,18 +283,26 @@ const DepressionFormDialog = ({ open, onClose }) => {
             const result = await response.json();
             console.log('Success:', result);
             onClose();
-
         } catch (error) {
-            console.error('Error:', error);
-            // Optionally, you could show an error message to the user here
+            console.error('Error during submission:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
-
-
+    const handleDialogClose = (event, reason) => {
+        if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+            onClose();
+        }
+    };
 
     return (
-        <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+        <Dialog
+            open={open}
+            onClose={handleDialogClose}
+            maxWidth="md"
+            fullWidth
+        >
             <Box className="depression-form-container p-4" sx={{ bgcolor: '#f9f9f9', borderRadius: 2, padding: '20px' }}>
                 <DialogTitle className="depression-form-header" sx={{ textAlign: 'center', pb: 2 }}>
                     <Typography variant="h4" component="div" className="font-sans" sx={{ fontWeight: 'bold', color: '#333' }}>
@@ -312,7 +321,7 @@ const DepressionFormDialog = ({ open, onClose }) => {
                             <Grid container alignItems="center" spacing={2} sx={{ paddingLeft: '20px', paddingRight: '20px' }}>
                                 <Grid item xs={12}>
                                     <Slider
-                                        value={answers[question.text]} // Always controlled
+                                        value={answers[question.text]}
                                         onChange={(e, newValue) => handleSliderChange(question.text, newValue)}
                                         min={0}
                                         max={3}
@@ -342,8 +351,9 @@ const DepressionFormDialog = ({ open, onClose }) => {
                         className="depression-form-button"
                         variant="contained"
                         sx={{ bgcolor: '#9DD2F2', textTransform: 'none', fontWeight: 'bold', px: 4, py: 1.5 }}
+                        disabled={loading}
                     >
-                        Submit
+                        {loading ? 'Submitting...' : 'Submit'}
                     </Button>
                 </DialogActions>
             </Box>

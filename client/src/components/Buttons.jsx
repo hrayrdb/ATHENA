@@ -38,6 +38,8 @@ const Buttons = () => {
     const [showLogoutDialog, setShowLogoutDialog] = useState(false);
     const [showProfileDialog, setShowProfileDialog] = useState(false);
     const [showSettingsDialog, setShowSettingsDialog] = useState(false);
+    const [showDepressionForm, setShowDepressionForm] = useState(false);
+    const [showAnxietyForm, setShowAnxietyForm] = useState(false);
 
     const sessionTabRef = useRef(null);
     const inputTabRef = useRef(null);
@@ -123,7 +125,7 @@ const Buttons = () => {
                 return null;
         }
     }
-
+    
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -295,18 +297,31 @@ const Buttons = () => {
                 )}
 
                 {/* Dialog for Profile */}
-                {/* <ProfileDialog
+                <ProfileDialog
                     open={showProfileDialog}
                     onClose={() => setShowProfileDialog(false)}
                     user={snap.user}
-                /> */}
-                <DepressionFormDialog open={showProfileDialog} />
+                />
                 {/* Dialog for Settings */}
                 <SettingsDialog
                     open={showSettingsDialog}
                     onClose={() => setShowSettingsDialog(false)}
                 />
 
+                {/* Dialogs for Depression and Anxiety forms */}
+                {showDepressionForm && (
+                    <DepressionFormDialog
+                        open={showDepressionForm}
+                        onClose={() => setShowDepressionForm(false)}
+                    />
+                )}
+
+                {showAnxietyForm && (
+                    <AnxietyFormDialog
+                        open={showAnxietyForm}
+                        onClose={() => setShowAnxietyForm(false)}
+                    />
+                )}
             </>
         </AnimatePresence>
     );
